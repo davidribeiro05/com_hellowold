@@ -10,7 +10,7 @@
     <copyright>Copyright Info</copyright>
     <license>License Info</license>
     <!--  The version string is recorded in the components table -->
-    <version>0.0.7</version>
+    <version>0.0.8</version>
     <!-- The description is optional and defaults to the name -->
     <description>Description of the Hello World component ...</description>
 
@@ -62,6 +62,8 @@
             <folder>models</folder>
             <!-- views files section -->
             <folder>views</folder>
+            <!-- language files section -->
+            <folder>language</folder>
         </files>
     </administration>
 
