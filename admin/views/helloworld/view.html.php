@@ -31,8 +31,7 @@ class HelloWorldViewHelloWorld extends JViewLegacy {
      *
      * @return  void
      */
-    public function display($tpl = null) 
-    {
+    public function display($tpl = null) {
         // Get the Data
         $this->form = $this->get('Form');
         $this->item = $this->get('Item');
@@ -50,6 +49,9 @@ class HelloWorldViewHelloWorld extends JViewLegacy {
 
         // Display the template
         parent::display($tpl);
+
+        // Set the document
+        $this->setDocument();
     }
 
     /**
@@ -59,8 +61,7 @@ class HelloWorldViewHelloWorld extends JViewLegacy {
      *
      * @since   1.6
      */
-    protected function addToolBar()
-    {
+    protected function addToolBar() {
         $input = JFactory::getApplication()->input;
 
         // Hide Joomla Administrator Main menu
@@ -74,11 +75,23 @@ class HelloWorldViewHelloWorld extends JViewLegacy {
             $title = JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT');
         }
 
-        JToolbarHelper::title($title, 'helloworld');
-        JToolbarHelper::save('helloworld.save');
-        JToolbarHelper::cancel(
+        JToolBarHelper::title($title, 'helloworld');
+        JToolBarHelper::save('helloworld.save');
+        JToolBarHelper::cancel(
                 'helloworld.cancel', $isNew ? 'JTOOLBAR_CANCEL' : 'JTOOLBAR_CLOSE'
         );
+    }
+
+    /**
+     * Method to set up the document properties
+     *
+     * @return void
+     */
+    protected function setDocument() {
+        $isNew = ($this->item->id < 1);
+        $document = JFactory::getDocument();
+        $document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') :
+                        JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
     }
 
 }
