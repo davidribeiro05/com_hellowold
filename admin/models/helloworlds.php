@@ -48,8 +48,13 @@ class HelloWorldModelHelloWorlds extends JModelList {
         $query = $db->getQuery(true);
 
         // Create the base select statement.
-        $query->select('*')
-                ->from($db->quoteName('#__helloworld'));
+        $query->select('a.id as id, a.greeting as greeting, a.published as published')
+                ->from($db->quoteName('#__helloworld', 'a'));
+
+        // Join over the categories.
+        $query->select($db->quoteName('c.title', 'category_title'))
+                ->join('LEFT', $db->quoteName('#__categories', 'c') . ' ON c.id = a.catid');
+
 
         // Filter: like / search
         $search = $this->getState('filter.search');
@@ -63,9 +68,9 @@ class HelloWorldModelHelloWorlds extends JModelList {
         $published = $this->getState('filter.published');
 
         if (is_numeric($published)) {
-            $query->where('published = ' . (int) $published);
+            $query->where('a.published = ' . (int) $published);
         } elseif ($published === '') {
-            $query->where('(published IN (0, 1))');
+            $query->where('(a.published IN (0, 1))');
         }
 
         // Add the list ordering clause.
@@ -76,5 +81,4 @@ class HelloWorldModelHelloWorlds extends JModelList {
 
         return $query;
     }
-
 }

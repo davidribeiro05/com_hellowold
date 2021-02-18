@@ -34,15 +34,17 @@ class JFormFieldHelloWorld extends JFormFieldList {
     protected function getOptions() {
         $db = JFactory::getDBO();
         $query = $db->getQuery(true);
-        $query->select('id,greeting');
+        $query->select('#__helloworld.id as id,greeting,#__categories.title as category,catid');
         $query->from('#__helloworld');
+        $query->leftJoin('#__categories on catid=#__categories.id');
         $db->setQuery((string) $query);
         $messages = $db->loadObjectList();
         $options = array();
 
         if ($messages) {
             foreach ($messages as $message) {
-                $options[] = JHtml::_('select.option', $message->id, $message->greeting);
+                $options[] = JHtml::_('select.option', $message->id, $message->greeting .
+                                ($message->catid ? ' (' . $message->category . ')' : ''));
             }
         }
 
