@@ -28,8 +28,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin {
      *
      * @since   1.6
      */
-    public function getTable($type = 'HelloWorld', $prefix = 'HelloWorldTable', $config = array()) 
-    {
+    public function getTable($type = 'HelloWorld', $prefix = 'HelloWorldTable', $config = array()) {
         return JTable::getInstance($type, $prefix, $config);
     }
 
@@ -43,8 +42,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin {
      *
      * @since   1.6
      */
-    public function getForm($data = array(), $loadData = true) 
-    {
+    public function getForm($data = array(), $loadData = true) {
         // Get the form.
         $form = $this->loadForm(
                 'com_helloworld.helloworld', 'helloworld', array(
@@ -61,14 +59,22 @@ class HelloWorldModelHelloWorld extends JModelAdmin {
     }
 
     /**
+     * Method to get the script that have to be included on the form
+     *
+     * @return string	Script files
+     */
+    public function getScript() {
+        return 'administrator/components/com_helloworld/models/forms/helloworld.js';
+    }
+
+    /**
      * Method to get the data that should be injected in the form.
      *
      * @return  mixed  The data for the form.
      *
      * @since   1.6
      */
-    protected function loadFormData() 
-    {
+    protected function loadFormData() {
         // Check the session for previously entered form data.
         $data = JFactory::getApplication()->getUserState(
                 'com_helloworld.edit.helloworld.data', array()
@@ -80,4 +86,5 @@ class HelloWorldModelHelloWorld extends JModelAdmin {
 
         return $data;
     }
+
 }
