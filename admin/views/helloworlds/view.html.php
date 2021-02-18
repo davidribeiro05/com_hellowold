@@ -47,7 +47,7 @@ class HelloWorldViewHelloWorlds extends JViewLegacy {
 
         // Set the submenu
         HelloWorldHelper::addSubmenu('helloworlds');
-        
+
         // Set the toolbar and number of found items
         $this->addToolBar();
 
@@ -76,6 +76,7 @@ class HelloWorldViewHelloWorlds extends JViewLegacy {
         JToolBarHelper::addNew('helloworld.add');
         JToolBarHelper::editList('helloworld.edit');
         JToolBarHelper::deleteList('', 'helloworlds.delete');
+        JToolBarHelper::preferences('com_helloworld');
     }
 
     /**
