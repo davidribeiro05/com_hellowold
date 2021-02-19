@@ -33,8 +33,9 @@ class HelloWorldViewHelloWorlds extends JViewLegacy {
         $this->items = $this->get('Items');
         $this->pagination = $this->get('Pagination');
         $this->state = $this->get('State');
-        $this->filter_order = $app->getUserStateFromRequest($context . 'filter_order', 'filter_order', 'greeting', 'cmd');
-        $this->filter_order_Dir = $app->getUserStateFromRequest($context . 'filter_order_Dir', 'filter_order_Dir', 'asc', 'cmd');
+        // Remove the old ordering mechanism
+        //$this->filter_order 	= $app->getUserStateFromRequest($context.'filter_order', 'filter_order', 'greeting', 'cmd');
+        //$this->filter_order_Dir = $app->getUserStateFromRequest($context.'filter_order_Dir', 'filter_order_Dir', 'asc', 'cmd');
         $this->filterForm = $this->get('FilterForm');
         $this->activeFilters = $this->get('ActiveFilters');
 
@@ -43,7 +44,9 @@ class HelloWorldViewHelloWorlds extends JViewLegacy {
 
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {
-            throw new Exception(implode("\n", $errors), 500);
+            JError::raiseError(500, implode('<br />', $errors));
+
+            return false;
         }
 
         // Set the submenu
@@ -74,7 +77,6 @@ class HelloWorldViewHelloWorlds extends JViewLegacy {
         }
 
         JToolBarHelper::title($title, 'helloworld');
-
         if ($this->canDo->get('core.create')) {
             JToolBarHelper::addNew('helloworld.add', 'JTOOLBAR_NEW');
         }
