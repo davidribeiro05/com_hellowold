@@ -8,8 +8,10 @@
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+
 ?>
 <h1><?php echo $this->item->greeting . (($this->item->category and $this->item->params->get('show_category')) ? (' (' . $this->item->category . ')') : '');
+
 ?>
 </h1>
 <?php
@@ -23,6 +25,15 @@ if ($src) {
     $caption = $this->item->imageDetails['caption'];
     echo sprintf($html, $src, $alt, $caption);
 }
+
 ?>
 <div id="map" class="map"></div>
 <div class="map-callout map-callout-bottom" id="greeting-container"></div>
+<div id="searchmap">
+<?php echo '<input id="token" type="hidden" name="' . JSession::getFormToken() . '" value="1" />'; ?>
+    <button type="button" class="btn btn-primary" onclick="searchHere();">
+<?php echo JText::_('COM_HELLOWORLD_SEARCH_HERE_BUTTON') ?>
+    </button>
+    <div id="searchresults">
+    </div>
+</div>

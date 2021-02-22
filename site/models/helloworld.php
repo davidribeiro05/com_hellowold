@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_helloworld
@@ -15,7 +14,8 @@ defined('_JEXEC') or die('Restricted access');
  *
  * @since  0.0.1
  */
-class HelloWorldModelHelloWorld extends JModelItem {
+class HelloWorldModelHelloWorld extends JModelItem
+{
 
     /**
      * @var object item
@@ -34,7 +34,8 @@ class HelloWorldModelHelloWorld extends JModelItem {
      * @return	void
      * @since	2.5
      */
-    protected function populateState() {
+    protected function populateState()
+    {
         // Get the message id
         $jinput = JFactory::getApplication()->input;
         $id = $jinput->get('id', 1, 'INT');
@@ -56,7 +57,8 @@ class HelloWorldModelHelloWorld extends JModelItem {
      *
      * @since   1.6
      */
-    public function getTable($type = 'HelloWorld', $prefix = 'HelloWorldTable', $config = array()) {
+    public function getTable($type = 'HelloWorld', $prefix = 'HelloWorldTable', $config = array())
+    {
         return JTable::getInstance($type, $prefix, $config);
     }
 
@@ -64,15 +66,16 @@ class HelloWorldModelHelloWorld extends JModelItem {
      * Get the message
      * @return object The message to be displayed to the user
      */
-    public function getItem() {
+    public function getItem()
+    {
         if (!isset($this->item)) {
             $id = $this->getState('message.id');
             $db = JFactory::getDbo();
             $query = $db->getQuery(true);
             $query->select('h.greeting, h.params, h.image as image, c.title as category, h.latitude as latitude, h.longitude as longitude')
-                    ->from('#__helloworld as h')
-                    ->leftJoin('#__categories as c ON h.catid=c.id')
-                    ->where('h.id=' . (int) $id);
+                ->from('#__helloworld as h')
+                ->leftJoin('#__categories as c ON h.catid=c.id')
+                ->where('h.id=' . (int) $id);
             $db->setQuery((string) $query);
 
             if ($this->item = $db->loadObject()) {
@@ -95,7 +98,8 @@ class HelloWorldModelHelloWorld extends JModelItem {
         return $this->item;
     }
 
-    public function getMapParams() {
+    public function getMapParams()
+    {
         if ($this->item) {
             $this->mapParams = array(
                 'latitude' => $this->item->latitude,
@@ -109,4 +113,25 @@ class HelloWorldModelHelloWorld extends JModelItem {
         }
     }
 
+    public function getMapSearchResults($mapbounds)
+    {
+        try {
+            $db = JFactory::getDbo();
+            $query = $db->getQuery(true);
+            $query->select('h.greeting, h.latitude, h.longitude')
+                ->from('#__helloworld as h')
+                ->where('h.latitude > ' . $mapbounds['minlat'] .
+                    ' AND h.latitude < ' . $mapbounds['maxlat'] .
+                    ' AND h.longitude > ' . $mapbounds['minlng'] .
+                    ' AND h.longitude < ' . $mapbounds['maxlng']);
+            $db->setQuery($query);
+            $results = $db->loadObjectList();
+        } catch (Exception $e) {
+            $msg = $e->getMessage();
+            JFactory::getApplication()->enqueueMessage($msg, 'error');
+            $results = null;
+        }
+
+        return $results;
+    }
 }

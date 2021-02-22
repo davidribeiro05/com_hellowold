@@ -8,6 +8,7 @@
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+
 /**
  * Hello World Component Controller
  *
@@ -15,4 +16,13 @@ defined('_JEXEC') or die('Restricted access');
  */
 class HelloWorldController extends JControllerLegacy
 {
+
+    public function mapsearch()
+    {
+        if (!JSession::checkToken('get')) {
+            echo new JResponseJson(null, JText::_('JINVALID_TOKEN'), true);
+        } else {
+            parent::display();
+        }
+    }
 }
