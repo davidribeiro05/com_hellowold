@@ -7,6 +7,7 @@ CREATE TABLE `#__helloworld` (
 	`created_by`  INT(10) UNSIGNED NOT NULL DEFAULT '0',
 	`greeting` VARCHAR(25) NOT NULL,
 	`alias`  VARCHAR(40)  NOT NULL DEFAULT '',
+        `language`  CHAR(7)  NOT NULL DEFAULT '*',  
 	`published` tinyint(4) NOT NULL DEFAULT '1',
 	`catid`	    int(11)    NOT NULL DEFAULT '0',
 	`params`   VARCHAR(1024) NOT NULL DEFAULT '',
@@ -15,12 +16,12 @@ CREATE TABLE `#__helloworld` (
 	`longitude` DECIMAL(10,7) NOT NULL DEFAULT 0.0,
 	PRIMARY KEY (`id`)
 )
-	ENGINE =MyISAM
+	ENGINE =InnoDB
 	AUTO_INCREMENT =0
 	DEFAULT CHARSET =utf8;
 
-CREATE UNIQUE INDEX `aliasindex` ON `#__helloworld` (`alias`);
+CREATE UNIQUE INDEX `aliasindex` ON `#__helloworld` (`alias`, `catid`);
 
-INSERT INTO `#__helloworld` (`greeting`,`alias`) VALUES
-('Hello World!','hello-world'),
-('Goodbye World!','goodbye-world');
+INSERT INTO `#__helloworld` (`greeting`,`alias`,`language`) VALUES
+('Hello World!','hello-world','en-GB'),
+('Goodbye World!','goodbye-world','en-GB');

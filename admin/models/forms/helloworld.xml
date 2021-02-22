@@ -63,6 +63,14 @@
             required="true"
             default="0.0"
         />
+        <field
+            name="language" 
+            type="contentlanguage" 
+            label="JFIELD_LANGUAGE_LABEL"
+            description="COM_HELLOWORLD_HELLOWORLD_FIELD_LANGUAGE_DESC"
+        >
+            <option value="*">JALL</option>
+        </field>
     </fieldset>
     <fields name="imageinfo">
         <fieldset
@@ -76,15 +84,15 @@
                 label="COM_HELLOWORLD_HELLOWORLD_FIELD_IMAGE_LABEL"
                 description="COM_HELLOWORLD_HELLOWORLD_FIELD_IMAGE_DESC" />
             <field name="alt"
-                               type="text"
-                               label="COM_HELLOWORLD_HELLOWORLD_FIELD_ALT_LABEL"
-                               description="COM_HELLOWORLD_HELLOWORLD_FIELD_ALT_DESC"
-                               size="30"/>
+                   type="text"
+                   label="COM_HELLOWORLD_HELLOWORLD_FIELD_ALT_LABEL"
+                   description="COM_HELLOWORLD_HELLOWORLD_FIELD_ALT_DESC"
+                   size="30"/>
             <field name="caption"
-                               type="text"
-                               label="COM_HELLOWORLD_HELLOWORLD_FIELD_CAPTION_LABEL"
-                               description="COM_HELLOWORLD_HELLOWORLD_FIELD_CAPTION_DESC"
-                               size="30"/>
+                   type="text"
+                   label="COM_HELLOWORLD_HELLOWORLD_FIELD_CAPTION_LABEL"
+                   description="COM_HELLOWORLD_HELLOWORLD_FIELD_CAPTION_DESC"
+                   size="30"/>
         </fieldset>
     </fields>
     <fields name="params">

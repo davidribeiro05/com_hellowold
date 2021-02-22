@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_helloworld
@@ -15,7 +14,8 @@ defined('_JEXEC') or die('Restricted access');
  * This is the site view presenting the user with the ability to add a new Helloworld record
  * 
  */
-class HelloWorldViewForm extends JViewLegacy {
+class HelloWorldViewForm extends JViewLegacy
+{
 
     protected $form = null;
     protected $canDo;
@@ -27,11 +27,18 @@ class HelloWorldViewForm extends JViewLegacy {
      *
      * @return  void
      */
-    public function display($tpl = null) {
+    public function display($tpl = null)
+    {
         // Get the form to display
         $this->form = $this->get('Form');
         // Get the javascript script file for client-side validation
         $this->script = $this->get('Script');
+
+        // Propose current language as default
+        if (JLanguageMultilang::isEnabled()) {
+            $lang = JFactory::getLanguage()->getTag();
+            $this->form->setFieldAttribute('language', 'default', $lang);
+        }
 
         // Check that the user has permissions to create a new helloworld record
         $this->canDo = JHelperContent::getActions('com_helloworld');
@@ -59,13 +66,13 @@ class HelloWorldViewForm extends JViewLegacy {
      *
      * @return void
      */
-    protected function setDocument() {
+    protected function setDocument()
+    {
         $document = JFactory::getDocument();
         $document->setTitle(JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING'));
         $document->addScript(JURI::root() . $this->script);
         $document->addScript(JURI::root() . "/administrator/components/com_helloworld"
-                . "/views/helloworld/submitbutton.js");
+            . "/views/helloworld/submitbutton.js");
         JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
     }
-
 }

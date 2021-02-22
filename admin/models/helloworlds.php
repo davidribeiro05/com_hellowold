@@ -33,6 +33,7 @@ class HelloWorldModelHelloWorlds extends JModelList
                 'greeting',
                 'author',
                 'created',
+                'language',
                 'published'
             );
         }
@@ -53,7 +54,7 @@ class HelloWorldModelHelloWorlds extends JModelList
 
         // Create the base select statement.
         $query->select('a.id as id, a.greeting as greeting, a.published as published, a.created as created, 
-			  a.image as imageInfo, a.latitude as latitude, a.longitude as longitude, a.alias as alias')
+			  a.image as imageInfo, a.latitude as latitude, a.longitude as longitude, a.alias as alias, a.language as language')
             ->from($db->quoteName('#__helloworld', 'a'));
 
         // Join over the categories.
@@ -63,6 +64,12 @@ class HelloWorldModelHelloWorlds extends JModelList
         // Join with users table to get the username of the author
         $query->select($db->quoteName('u.username', 'author'))
             ->join('LEFT', $db->quoteName('#__users', 'u') . ' ON u.id = a.created_by');
+
+        // Join with languages table to get the language title and image to display
+        // Put these into fields called language_title and language_image so that 
+        // we can use the little com_content layout to display the map symbol
+        $query->select($db->quoteName('l.title', 'language_title') . "," . $db->quoteName('l.image', 'language_image'))
+            ->join('LEFT', $db->quoteName('#__languages', 'l') . ' ON l.lang_code = a.language');
 
         // Filter: like / search
         $search = $this->getState('filter.search');
@@ -79,6 +86,12 @@ class HelloWorldModelHelloWorlds extends JModelList
             $query->where('a.published = ' . (int) $published);
         } elseif ($published === '') {
             $query->where('(a.published IN (0, 1))');
+        }
+
+        // Filter by language, if the user has set that in the filter field
+        $language = $this->getState('filter.language');
+        if ($language) {
+            $query->where('a.language = ' . $db->quote($language));
         }
 
         // Add the list ordering clause.

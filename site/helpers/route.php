@@ -15,23 +15,29 @@ class HelloworldHelperRoute
      */
     public static function getAjaxURL()
     {
+        if (!JLanguageMultilang::isEnabled()) {
+            return null;
+        }
+
+        $lang = JFactory::getLanguage()->getTag();
         $app = JFactory::getApplication();
         $sitemenu = $app->getMenu();
         $thismenuitem = $sitemenu->getActive();
 
-        // if we haven't got an active menuitem, or we're currently on the messages menuitem then just stay there
-        if (!$thismenuitem || $thismenuitem->alias == "messages") {
+        // if we haven't got an active menuitem, or we're currently on a menuitem 
+        // with view=category or note = "Ajax", then just stay on it
+        if (!$thismenuitem || strpos($thismenuitem->link, "view=category") !== false || $thismenuitem->note == "Ajax") {
             return null;
         }
 
-        $mainmenuitems = $sitemenu->getItems('menutype', 'mainmenu');
-        foreach ($mainmenuitems as $menuitem) {
-            if ($menuitem->alias == "messages") {
-                $itemid = $menuitem->id;
-                $url = JRoute::_("index.php?Itemid=$itemid&view=helloworld&format=json");
-                return $url;
-            }
+        // look for a menuitem with the right language, and a note field of "Ajax"
+        $menuitem = $sitemenu->getItems(array('language', 'note'), array($lang, "Ajax"));
+        if ($menuitem) {
+            $itemid = $menuitem[0]->id;
+            $url = JRoute::_("index.php?Itemid=$itemid&view=helloworld&format=json");
+            return $url;
+        } else {
+            return null;
         }
-        return null;
     }
 }

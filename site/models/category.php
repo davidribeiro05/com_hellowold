@@ -36,9 +36,14 @@ class HelloworldModelCategory extends JModelList
         $query = $db->getQuery(true);
 
         $catid = $this->getState('category.id');
-        $query->select('id, greeting, alias')
+        $query->select('id, greeting, alias, catid')
             ->from($db->quoteName('#__helloworld'))
             ->where('catid = ' . $catid);
+
+        if (JLanguageMultilang::isEnabled()) {
+            $lang = JFactory::getLanguage()->getTag();
+            $query->where('language IN ("*","' . $lang . '")');
+        }
 
         $orderCol = $this->state->get('list.ordering', 'greeting');
         $orderDirn = $this->state->get('list.direction', 'asc');
@@ -46,5 +51,33 @@ class HelloworldModelCategory extends JModelList
         $query->order($db->escape($orderCol) . ' ' . $db->escape($orderDirn));
 
         return $query;
+    }
+
+    public function getCategoryName()
+    {
+        $catid = $this->getState('category.id');
+        $categories = JCategories::getInstance('Helloworld', array());
+        $categoryNode = $categories->get($catid);
+        return $categoryNode->title;
+    }
+
+    public function getSubcategories()
+    {
+        $catid = $this->getState('category.id');
+        $categories = JCategories::getInstance('Helloworld', array());
+        $categoryNode = $categories->get($catid);
+        $subcats = $categoryNode->getChildren();
+
+        $lang = JFactory::getLanguage()->getTag();
+        if (JLanguageMultilang::isEnabled() && $lang) {
+            $query_lang = "&lang={$lang}";
+        } else {
+            $query_lang = '';
+        }
+
+        foreach ($subcats as $subcat) {
+            $subcat->url = JRoute::_("index.php?view=category&id=" . $subcat->id . $query_lang);
+        }
+        return $subcats;
     }
 }

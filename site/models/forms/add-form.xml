@@ -71,6 +71,13 @@
             </field>
         </fields>
         <field
+            name="language"
+            type="contentlanguage"
+            label="JFIELD_LANGUAGE_LABEL"
+            description="JFIELD_LANGUAGE_DESC"
+            class="inputbox">
+        </field>
+        <field
             name="message"
             type="textarea"
             rows="5"

@@ -8,20 +8,26 @@ JHtml::_('formbehavior.chosen', 'select');
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
+$lang = JFactory::getLanguage()->getTag();
+if (JLanguageMultilang::isEnabled() && $lang) {
+    $query_lang = "&lang={$lang}";
+} else {
+    $query_lang = "";
+}
 
 ?>
 <form action="#" method="post" id="adminForm" name="adminForm">
-
+    <h1><?php echo $this->categoryName; ?></h1>
     <div id="j-main-container" class="span10">
         <div class="row-fluid">
             <div class="span10">
-                <?php
-                echo JLayoutHelper::render(
-                    'joomla.searchtools.default',
-                    array('view' => $this, 'searchButton' => false)
-                );
+<?php
+echo JLayoutHelper::render(
+    'joomla.searchtools.default',
+    array('view' => $this, 'searchButton' => false)
+);
 
-                ?>
+?>
             </div>
         </div>
         <table class="table table-striped table-hover">
@@ -50,10 +56,10 @@ $listDirn = $this->escape($this->state->get('list.direction'));
                 </tr>
             </tfoot>
             <tbody>
-                <?php if (!empty($this->items)) : ?>
+<?php if (!empty($this->items)) : ?>
                     <?php
                     foreach ($this->items as $i => $row) :
-                        $url = JRoute::_('index.php?option=com_helloworld&view=helloworld&id=' . $row->id);
+                        $url = JRoute::_('index.php?option=com_helloworld&view=helloworld&id=' . $row->id . ':' . $row->alias . '&catid=' . $row->catid . $query_lang);
 
                         ?>
                         <tr>
@@ -63,9 +69,14 @@ $listDirn = $this->escape($this->state->get('list.direction'));
                             <td align="center"><a href="<?php echo $url; ?>"><?php echo $url; ?></a></td>
                             <td align="center"><?php echo $row->id; ?></td>
                         </tr>
-    <?php endforeach; ?>
-<?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </tbody>
         </table>
+        <h1><?php echo JText::_('COM_HELLOWORLD_HEADER_SUBCATEGORIES'); ?></h1>
+        <?php foreach ($this->subcategories as $subcategory) : ?>
+            <h3><a href="<?php echo $subcategory->url; ?>"> <?php echo $subcategory->title; ?> </a></h3>
+            <p><?php echo $subcategory->description; ?></p>
+        <?php endforeach; ?>
     </div>
 </form>

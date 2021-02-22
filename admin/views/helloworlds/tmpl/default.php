@@ -47,11 +47,14 @@ $listDirn = $this->escape($this->state->get('list.direction'));
                     <th width="15%">
                         <?php echo JText::_('COM_HELLOWORLD_HELLOWORLDS_POSITION'); ?>
                     </th>
-                    <th width="30%">
+                    <th width="15%">
                         <?php echo JText::_('COM_HELLOWORLD_HELLOWORLDS_IMAGE'); ?>
                     </th>
                     <th width="15%">
                         <?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_AUTHOR', 'author', $listDirn, $listOrder); ?>
+                    </th>
+                    <th width="15%">
+                        <?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_LANGUAGE', 'language', $listDirn, $listOrder); ?>
                     </th>
                     <th width="15%">
                         <?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_CREATED_DATE', 'created', $listDirn, $listOrder); ?>
@@ -110,6 +113,9 @@ $listDirn = $this->escape($this->state->get('list.direction'));
                             </td>
                             <td align="center">
                                 <?php echo $row->author; ?>
+                            </td>
+                            <td align="center">
+                                <?php echo JLayoutHelper::render('joomla.content.language', $row); ?>
                             </td>
                             <td align="center">
                                 <?php echo substr($row->created, 0, 10); ?>

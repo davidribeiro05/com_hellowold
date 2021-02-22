@@ -78,6 +78,12 @@ class HelloWorldModelHelloWorld extends JModelItem
                 ->from('#__helloworld as h')
                 ->leftJoin('#__categories as c ON h.catid=c.id')
                 ->where('h.id=' . (int) $id);
+
+            if (JLanguageMultilang::isEnabled()) {
+                $lang = JFactory::getLanguage()->getTag();
+                $query->where('h.language IN ("*","' . $lang . '")');
+            }
+
             $db->setQuery((string) $query);
 
             if ($this->item = $db->loadObject()) {
@@ -95,6 +101,8 @@ class HelloWorldModelHelloWorld extends JModelItem
                 $image = new JRegistry;
                 $image->loadString($this->item->image, 'JSON');
                 $this->item->imageDetails = $image;
+            } else {
+                throw new Exception('Helloworld id not found', 404);
             }
         }
         return $this->item;
@@ -122,12 +130,18 @@ class HelloWorldModelHelloWorld extends JModelItem
         try {
             $db = JFactory::getDbo();
             $query = $db->getQuery(true);
-            $query->select('h.id, h.greeting, h.latitude, h.longitude')
+            $query->select('h.id, h.alias, h.catid, h.greeting, h.latitude, h.longitude')
                 ->from('#__helloworld as h')
                 ->where('h.latitude > ' . $mapbounds['minlat'] .
                     ' AND h.latitude < ' . $mapbounds['maxlat'] .
                     ' AND h.longitude > ' . $mapbounds['minlng'] .
                     ' AND h.longitude < ' . $mapbounds['maxlng']);
+
+            if (JLanguageMultilang::isEnabled()) {
+                $lang = JFactory::getLanguage()->getTag();
+                $query->where('h.language IN ("*","' . $lang . '")');
+            }
+
             $db->setQuery($query);
             $results = $db->loadObjectList();
         } catch (Exception $e) {
@@ -136,8 +150,15 @@ class HelloWorldModelHelloWorld extends JModelItem
             $results = null;
         }
 
+        if (JLanguageMultilang::isEnabled()) {
+            $query_lang = "&lang={$lang}";
+        } else {
+            $query_lang = "";
+        }
+
         for ($i = 0; $i < count($results); $i++) {
-            $results[$i]->url = JRoute::_('index.php?option=com_helloworld&view=helloworld&id=' . $results[$i]->id);
+            $results[$i]->url = JRoute::_('index.php?option=com_helloworld&view=helloworld&id=' . $results[$i]->id .
+                    ":" . $results[$i]->alias . '&catid=' . $results[$i]->catid . $query_lang);
         }
 
         return $results;
