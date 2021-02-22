@@ -6,18 +6,21 @@ CREATE TABLE `#__helloworld` (
 	`created`  DATETIME    NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`created_by`  INT(10) UNSIGNED NOT NULL DEFAULT '0',
 	`greeting` VARCHAR(25) NOT NULL,
+	`alias`  VARCHAR(40)  NOT NULL DEFAULT '',
 	`published` tinyint(4) NOT NULL DEFAULT '1',
 	`catid`	    int(11)    NOT NULL DEFAULT '0',
 	`params`   VARCHAR(1024) NOT NULL DEFAULT '',
 	`image`   VARCHAR(1024) NOT NULL DEFAULT '',
-        `latitude` DECIMAL(9,7) NOT NULL DEFAULT 0.0,
+	`latitude` DECIMAL(9,7) NOT NULL DEFAULT 0.0,
 	`longitude` DECIMAL(10,7) NOT NULL DEFAULT 0.0,
 	PRIMARY KEY (`id`)
 )
-	ENGINE =InnoDB
+	ENGINE =MyISAM
 	AUTO_INCREMENT =0
 	DEFAULT CHARSET =utf8;
 
-INSERT INTO `#__helloworld` (`greeting`) VALUES
-('Hello World!'),
-('Goodbye World!');
+CREATE UNIQUE INDEX `aliasindex` ON `#__helloworld` (`alias`);
+
+INSERT INTO `#__helloworld` (`greeting`,`alias`) VALUES
+('Hello World!','hello-world'),
+('Goodbye World!','goodbye-world');

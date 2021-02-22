@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_helloworld
@@ -15,14 +14,16 @@ defined('_JEXEC') or die('Restricted access');
  *
  * @since  0.0.1
  */
-class HelloWorldTableHelloWorld extends JTable {
+class HelloWorldTableHelloWorld extends JTable
+{
 
     /**
      * Constructor
      *
      * @param   JDatabaseDriver  &$db  A database connector object
      */
-    function __construct(&$db) {
+    function __construct(&$db)
+    {
         parent::__construct('#__helloworld', 'id', $db);
     }
 
@@ -34,7 +35,8 @@ class HelloWorldTableHelloWorld extends JTable {
      * @see JTable:bind
      * @since 1.5
      */
-    public function bind($array, $ignore = '') {
+    public function bind($array, $ignore = '')
+    {
         if (isset($array['params']) && is_array($array['params'])) {
             // Convert the params field to a string.
             $parameter = new JRegistry;
@@ -66,7 +68,8 @@ class HelloWorldTableHelloWorld extends JTable {
      * @return	string
      * @since	2.5
      */
-    protected function _getAssetName() {
+    protected function _getAssetName()
+    {
         $k = $this->_tbl_key;
         return 'com_helloworld.helloworld.' . (int) $this->$k;
     }
@@ -77,7 +80,8 @@ class HelloWorldTableHelloWorld extends JTable {
      * @return	string
      * @since	2.5
      */
-    protected function _getAssetTitle() {
+    protected function _getAssetTitle()
+    {
         return $this->greeting;
     }
 
@@ -86,7 +90,8 @@ class HelloWorldTableHelloWorld extends JTable {
      *
      * @return	int
      */
-    protected function _getAssetParentId(JTable $table = NULL, $id = NULL) {
+    protected function _getAssetParentId(JTable $table = NULL, $id = NULL)
+    {
         // We will retrieve the parent-asset from the Asset-table
         $assetParent = JTable::getInstance('Asset');
         // Default: if no asset-parent can be found we take the global asset
@@ -108,4 +113,13 @@ class HelloWorldTableHelloWorld extends JTable {
         return $assetParentId;
     }
 
+    public function check()
+    {
+        $this->alias = trim($this->alias);
+        if (empty($this->alias)) {
+            $this->alias = $this->greeting;
+        }
+        $this->alias = JFilterOutput::stringURLSafe($this->alias);
+        return true;
+    }
 }

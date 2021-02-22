@@ -1,4 +1,5 @@
 var map;
+var ajaxurl;
 
 jQuery(document).ready(function () {
 
@@ -6,6 +7,7 @@ jQuery(document).ready(function () {
     // params is a Javascript object with properties for the map display: 
     // centre latitude, centre longitude and zoom, and the helloworld greeting
     const params = Joomla.getOptions('params');
+    ajaxurl = params.ajaxurl;
 
     // We'll use OpenLayers to draw the map (http://openlayers.org/)
 
@@ -106,7 +108,8 @@ function searchHere() {
     var mapBounds = getMapBounds();
     var token = jQuery("#token").attr("name");
     jQuery.ajax({
-        data: {[token]: "1", task: "mapsearch", format: "json", mapBounds: mapBounds},
+        url: ajaxurl,
+        data: {[token]: "1", task: "mapsearch", view: "helloworld", format: "json", mapBounds: mapBounds},
         success: function (result, status, xhr) {
             displaySearchResults(result);
         },
@@ -120,7 +123,8 @@ function displaySearchResults(result) {
     if (result.success) {
         var html = "";
         for (var i = 0; i < result.data.length; i++) {
-            html += "<p>" + result.data[i].greeting +
+            html += '<p><a href="' + result.data[i].url + '">' +
+                    result.data[i].greeting + '</a>' +
                     " @ " + result.data[i].latitude +
                     ", " + result.data[i].longitude + "</p>";
         }

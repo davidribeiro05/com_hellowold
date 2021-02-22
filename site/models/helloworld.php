@@ -9,6 +9,8 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+JLoader::register('HelloworldHelperRoute', JPATH_ROOT . '/components/com_helloworld/helpers/route.php');
+
 /**
  * HelloWorld Model
  *
@@ -101,11 +103,13 @@ class HelloWorldModelHelloWorld extends JModelItem
     public function getMapParams()
     {
         if ($this->item) {
+            $url = HelloworldHelperRoute::getAjaxURL();
             $this->mapParams = array(
                 'latitude' => $this->item->latitude,
                 'longitude' => $this->item->longitude,
                 'zoom' => 10,
-                'greeting' => $this->item->greeting
+                'greeting' => $this->item->greeting,
+                'ajaxurl' => $url
             );
             return $this->mapParams;
         } else {
@@ -118,7 +122,7 @@ class HelloWorldModelHelloWorld extends JModelItem
         try {
             $db = JFactory::getDbo();
             $query = $db->getQuery(true);
-            $query->select('h.greeting, h.latitude, h.longitude')
+            $query->select('h.id, h.greeting, h.latitude, h.longitude')
                 ->from('#__helloworld as h')
                 ->where('h.latitude > ' . $mapbounds['minlat'] .
                     ' AND h.latitude < ' . $mapbounds['maxlat'] .
@@ -130,6 +134,10 @@ class HelloWorldModelHelloWorld extends JModelItem
             $msg = $e->getMessage();
             JFactory::getApplication()->enqueueMessage($msg, 'error');
             $results = null;
+        }
+
+        for ($i = 0; $i < count($results); $i++) {
+            $results[$i]->url = JRoute::_('index.php?option=com_helloworld&view=helloworld&id=' . $results[$i]->id);
         }
 
         return $results;

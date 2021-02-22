@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_helloworld
@@ -13,7 +12,8 @@ defined('_JEXEC') or die('Restricted access');
 /**
  * Form Rule class for the Joomla Framework.
  */
-class JFormRuleGreeting extends JFormRule {
+class JFormRuleGreeting extends JFormRule
+{
 
     /**
      * The regular expression.
@@ -22,6 +22,6 @@ class JFormRuleGreeting extends JFormRule {
      * @var		string
      * @since	2.5
      */
-    protected $regex = '^[^0-9]+$';
+    protected $regex = '^[^\*]+$';
 
 }

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_helloworld
@@ -15,7 +14,8 @@ defined('_JEXEC') or die('Restricted access');
  *
  * @since  0.0.1
  */
-class HelloWorldModelHelloWorlds extends JModelList {
+class HelloWorldModelHelloWorlds extends JModelList
+{
 
     /**
      * Constructor.
@@ -25,7 +25,8 @@ class HelloWorldModelHelloWorlds extends JModelList {
      * @see     JController
      * @since   1.6
      */
-    public function __construct($config = array()) {
+    public function __construct($config = array())
+    {
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
                 'id',
@@ -44,23 +45,24 @@ class HelloWorldModelHelloWorlds extends JModelList {
      *
      * @return      string  An SQL query
      */
-    protected function getListQuery() {
+    protected function getListQuery()
+    {
         // Initialize variables.
         $db = JFactory::getDbo();
         $query = $db->getQuery(true);
 
         // Create the base select statement.
         $query->select('a.id as id, a.greeting as greeting, a.published as published, a.created as created, 
-			  a.image as imageInfo, a.latitude as latitude, a.longitude as longitude')
-                ->from($db->quoteName('#__helloworld', 'a'));
+			  a.image as imageInfo, a.latitude as latitude, a.longitude as longitude, a.alias as alias')
+            ->from($db->quoteName('#__helloworld', 'a'));
 
         // Join over the categories.
         $query->select($db->quoteName('c.title', 'category_title'))
-                ->join('LEFT', $db->quoteName('#__categories', 'c') . ' ON c.id = a.catid');
+            ->join('LEFT', $db->quoteName('#__categories', 'c') . ' ON c.id = a.catid');
 
         // Join with users table to get the username of the author
         $query->select($db->quoteName('u.username', 'author'))
-                ->join('LEFT', $db->quoteName('#__users', 'u') . ' ON u.id = a.created_by');
+            ->join('LEFT', $db->quoteName('#__users', 'u') . ' ON u.id = a.created_by');
 
         // Filter: like / search
         $search = $this->getState('filter.search');
@@ -87,5 +89,4 @@ class HelloWorldModelHelloWorlds extends JModelList {
 
         return $query;
     }
-
 }
