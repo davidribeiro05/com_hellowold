@@ -33,6 +33,28 @@
         >
             <option value="0">JOPTION_SELECT_CATEGORY</option>
         </field>
+        <field
+            name="latitude"
+            type="number"
+            label="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_LABEL"
+            description="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_DESC"
+            min="-90.0"
+            max="90.0"
+            class="inputbox"
+            required="true"
+            default="0.0"
+        />
+        <field
+            name="longitude"
+            type="number"
+            label="COM_HELLOWORLD_HELLOWORLD_FIELD_LONGITUDE_LABEL"
+            description="COM_HELLOWORLD_HELLOWORLD_FIELD_LONGITUDE_DESC"
+            min="-180.0"
+            max="180.0"
+            class="inputbox"
+            required="true"
+            default="0.0"
+        />
     </fieldset>
     <fields name="imageinfo">
         <fieldset

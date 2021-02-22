@@ -69,7 +69,7 @@ class HelloWorldModelHelloWorld extends JModelItem {
             $id = $this->getState('message.id');
             $db = JFactory::getDbo();
             $query = $db->getQuery(true);
-            $query->select('h.greeting, h.params, h.image as image, c.title as category')
+            $query->select('h.greeting, h.params, h.image as image, c.title as category, h.latitude as latitude, h.longitude as longitude')
                     ->from('#__helloworld as h')
                     ->leftJoin('#__categories as c ON h.catid=c.id')
                     ->where('h.id=' . (int) $id);
@@ -93,6 +93,20 @@ class HelloWorldModelHelloWorld extends JModelItem {
             }
         }
         return $this->item;
+    }
+
+    public function getMapParams() {
+        if ($this->item) {
+            $this->mapParams = array(
+                'latitude' => $this->item->latitude,
+                'longitude' => $this->item->longitude,
+                'zoom' => 10,
+                'greeting' => $this->item->greeting
+            );
+            return $this->mapParams;
+        } else {
+            throw new Exception('No helloworld details available for map', 500);
+        }
     }
 
 }

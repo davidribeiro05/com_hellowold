@@ -10,9 +10,11 @@ CREATE TABLE `#__helloworld` (
 	`catid`	    int(11)    NOT NULL DEFAULT '0',
 	`params`   VARCHAR(1024) NOT NULL DEFAULT '',
 	`image`   VARCHAR(1024) NOT NULL DEFAULT '',
+        `latitude` DECIMAL(9,7) NOT NULL DEFAULT 0.0,
+	`longitude` DECIMAL(10,7) NOT NULL DEFAULT 0.0,
 	PRIMARY KEY (`id`)
 )
-	ENGINE =MyISAM
+	ENGINE =InnoDB
 	AUTO_INCREMENT =0
 	DEFAULT CHARSET =utf8;
 

@@ -35,8 +35,29 @@ class HelloWorldViewHelloWorld extends JViewLegacy {
             return false;
         }
 
+        $this->addMap();
+
         // Display the view
         parent::display($tpl);
+    }
+
+    function addMap() {
+        $document = JFactory::getDocument();
+
+        // everything's dependent upon JQuery
+        JHtml::_('jquery.framework');
+
+        // we need the Openlayers JS and CSS libraries
+        $document->addScript("https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.6.4/ol.js");
+        $document->addStyleSheet("https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.6.4/ol.css");
+
+        // ... and our own JS and CSS
+        $document->addScript(JURI::root() . "media/com_helloworld/js/openstreetmap.js");
+        $document->addStyleSheet(JURI::root() . "media/com_helloworld/css/openstreetmap.css");
+
+        // get the data to pass to our JS code
+        $params = $this->get("mapParams");
+        $document->addScriptOptions('params', $params);
     }
 
 }

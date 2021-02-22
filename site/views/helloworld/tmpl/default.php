@@ -24,3 +24,5 @@ if ($src) {
     echo sprintf($html, $src, $alt, $caption);
 }
 ?>
+<div id="map" class="map"></div>
+<div class="map-callout map-callout-bottom" id="greeting-container"></div>

@@ -26,7 +26,8 @@ $listDirn = $this->escape($this->state->get('list.direction'));
                 <?php echo JText::_('COM_HELLOWORLD_HELLOWORLDS_FILTER'); ?>
                 <?php
                 echo JLayoutHelper::render(
-                        'joomla.searchtools.default', array('view' => $this)
+                        'joomla.searchtools.default',
+                        array('view' => $this)
                 );
                 ?>
             </div>
@@ -36,37 +37,40 @@ $listDirn = $this->escape($this->state->get('list.direction'));
                 <tr>
                     <th width="1%"><?php echo JText::_('COM_HELLOWORLD_NUM'); ?></th>
                     <th width="2%">
-<?php echo JHtml::_('grid.checkall'); ?>
-                    </th>
-                    <th width="30%">
-<?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_HELLOWORLDS_NAME', 'greeting', $listDirn, $listOrder); ?>
-                    </th>
-                    <th width="30%">
-<?php echo JText::_('COM_HELLOWORLD_HELLOWORLDS_IMAGE'); ?>
+                        <?php echo JHtml::_('grid.checkall'); ?>
                     </th>
                     <th width="15%">
-<?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_AUTHOR', 'author', $listDirn, $listOrder); ?>
+                        <?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_HELLOWORLDS_NAME', 'greeting', $listDirn, $listOrder); ?>
                     </th>
                     <th width="15%">
-<?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_CREATED_DATE', 'created', $listDirn, $listOrder); ?>
+                        <?php echo JText::_('COM_HELLOWORLD_HELLOWORLDS_POSITION'); ?>
+                    </th>
+                    <th width="30%">
+                        <?php echo JText::_('COM_HELLOWORLD_HELLOWORLDS_IMAGE'); ?>
+                    </th>
+                    <th width="15%">
+                        <?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_AUTHOR', 'author', $listDirn, $listOrder); ?>
+                    </th>
+                    <th width="15%">
+                        <?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_CREATED_DATE', 'created', $listDirn, $listOrder); ?>
                     </th>
                     <th width="5%">
-<?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_PUBLISHED', 'published', $listDirn, $listOrder); ?>
+                        <?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_PUBLISHED', 'published', $listDirn, $listOrder); ?>
                     </th>
                     <th width="2%">
-<?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_ID', 'id', $listDirn, $listOrder); ?>
+                        <?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_ID', 'id', $listDirn, $listOrder); ?>
                     </th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
                     <td colspan="5">
-<?php echo $this->pagination->getListFooter(); ?>
+                        <?php echo $this->pagination->getListFooter(); ?>
                     </td>
                 </tr>
             </tfoot>
             <tbody>
-<?php if (!empty($this->items)) : ?>
+                <?php if (!empty($this->items)) : ?>
                     <?php
                     foreach ($this->items as $i => $row) :
                         $link = JRoute::_('index.php?option=com_helloworld&task=helloworld.edit&id=' . $row->id);
@@ -87,32 +91,35 @@ $listDirn = $this->escape($this->state->get('list.direction'));
                                 </div>
                             </td>
                             <td align="center">
+                                <?php echo "[" . $row->latitude . ", " . $row->longitude . "]"; ?>
+                            </td>
+                            <td align="center">
                                 <?php
-                                $caption = $row->image->get('caption') ? : '';
-                                $src = JURI::root() . ($row->image->get('image') ? : '' );
+                                $caption = $row->image->get('caption') ?: '';
+                                $src = JURI::root() . ($row->image->get('image') ?: '' );
                                 $html = '<p class="hasTooltip" style="display: inline-block" data-html="true" data-toggle="tooltip" data-placement="right" title="<img width=\'100px\' height=\'100px\' src=\'%s\'>">%s</p>';
                                 echo sprintf($html, $src, $caption);
                                 ?>
                             </td>
                             <td align="center">
-                                <?php echo $row->author; ?>
+        <?php echo $row->author; ?>
                             </td>
                             <td align="center">
-                                <?php echo substr($row->created, 0, 10); ?>
+        <?php echo substr($row->created, 0, 10); ?>
                             </td>
                             <td align="center">
-                                <?php echo JHtml::_('jgrid.published', $row->published, $i, 'helloworlds.', true, 'cb'); ?>
+        <?php echo JHtml::_('jgrid.published', $row->published, $i, 'helloworlds.', true, 'cb'); ?>
                             </td>
                             <td align="center">
-                                <?php echo $row->id; ?>
+        <?php echo $row->id; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                <?php endif; ?>
+<?php endif; ?>
             </tbody>
         </table>
         <input type="hidden" name="task" value=""/>
         <input type="hidden" name="boxchecked" value="0"/>
-        <?php echo JHtml::_('form.token'); ?>
+<?php echo JHtml::_('form.token'); ?>
     </div>
 </form>

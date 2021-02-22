@@ -51,7 +51,7 @@ class HelloWorldModelHelloWorlds extends JModelList {
 
         // Create the base select statement.
         $query->select('a.id as id, a.greeting as greeting, a.published as published, a.created as created, 
-			  a.image as imageInfo')
+			  a.image as imageInfo, a.latitude as latitude, a.longitude as longitude')
                 ->from($db->quoteName('#__helloworld', 'a'));
 
         // Join over the categories.
