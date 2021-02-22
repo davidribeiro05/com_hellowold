@@ -50,7 +50,8 @@ class HelloWorldModelHelloWorlds extends JModelList {
         $query = $db->getQuery(true);
 
         // Create the base select statement.
-        $query->select('a.id as id, a.greeting as greeting, a.published as published, a.created as created')
+        $query->select('a.id as id, a.greeting as greeting, a.published as published, a.created as created, 
+			  a.image as imageInfo')
                 ->from($db->quoteName('#__helloworld', 'a'));
 
         // Join over the categories.

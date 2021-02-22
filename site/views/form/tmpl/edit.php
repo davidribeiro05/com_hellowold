@@ -14,7 +14,7 @@ defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.formvalidator');
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=form&layout=edit'); ?>"
-      method="post" name="adminForm" id="adminForm" class="form-validate">
+      method="post" name="adminForm" id="adminForm" class="form-validate" enctype="multipart/form-data">
 
     <div class="form-horizontal">
         <fieldset class="adminform">

@@ -10,12 +10,27 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\Registry\Registry;
+
 /**
  * HelloWorld Model
  *
  * @since  0.0.1
  */
 class HelloWorldModelHelloWorld extends JModelAdmin {
+
+    /**
+     * Method to override getItem to allow us to convert the JSON-encoded image information
+     * in the database record into an array for subsequent prefilling of the edit form
+     */
+    public function getItem($pk = null) {
+        $item = parent::getItem($pk);
+        if ($item AND property_exists($item, 'image')) {
+            $registry = new Registry($item->image);
+            $item->imageinfo = $registry->toArray();
+        }
+        return $item;
+    }
 
     /**
      * Method to get a table object, load it if necessary.

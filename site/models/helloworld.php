@@ -69,7 +69,7 @@ class HelloWorldModelHelloWorld extends JModelItem {
             $id = $this->getState('message.id');
             $db = JFactory::getDbo();
             $query = $db->getQuery(true);
-            $query->select('h.greeting, h.params, c.title as category')
+            $query->select('h.greeting, h.params, h.image as image, c.title as category')
                     ->from('#__helloworld as h')
                     ->leftJoin('#__categories as c ON h.catid=c.id')
                     ->where('h.id=' . (int) $id);
@@ -85,6 +85,11 @@ class HelloWorldModelHelloWorld extends JModelItem {
                 $params = clone $this->getState('params');
                 $params->merge($this->item->params);
                 $this->item->params = $params;
+
+                // Convert the JSON-encoded image info into an array
+                $image = new JRegistry;
+                $image->loadString($this->item->image, 'JSON');
+                $this->item->imageDetails = $image;
             }
         }
         return $this->item;

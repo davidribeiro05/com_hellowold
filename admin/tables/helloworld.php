@@ -42,6 +42,13 @@ class HelloWorldTableHelloWorld extends JTable {
             $array['params'] = (string) $parameter;
         }
 
+        if (isset($array['imageinfo']) && is_array($array['imageinfo'])) {
+            // Convert the imageinfo array to a string.
+            $parameter = new JRegistry;
+            $parameter->loadArray($array['imageinfo']);
+            $array['image'] = (string) $parameter;
+        }
+
         // Bind the rules.
         if (isset($array['rules']) && is_array($array['rules'])) {
             $rules = new JAccessRules($array['rules']);
