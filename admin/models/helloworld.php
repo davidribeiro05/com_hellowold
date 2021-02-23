@@ -209,4 +209,23 @@ class HelloWorldModelHelloWorld extends JModelAdmin
             return JFactory::getUser()->authorise("core.delete", "com_helloworld.helloworld." . $record->id);
         }
     }
+
+    /**
+     * Prepare a helloworld record for saving in the database
+     */
+    protected function prepareTable($table)
+    {
+        // Set ordering to the last item if not set
+        if (empty($table->ordering)) {
+            $db = $this->getDbo();
+            $query = $db->getQuery(true)
+                ->select('MAX(ordering)')
+                ->from('#__helloworld');
+
+            $db->setQuery($query);
+            $max = $db->loadResult();
+
+            $table->ordering = $max + 1;
+        }
+    }
 }

@@ -33,6 +33,8 @@ class HelloWorldModelHelloWorlds extends JModelList
                 'author',
                 'created',
                 'language',
+                'ordering',
+                'category_id',
                 'association',
                 'published'
             );
@@ -77,7 +79,7 @@ class HelloWorldModelHelloWorlds extends JModelList
 
         // Create the base select statement.
         $query->select('a.id as id, a.greeting as greeting, a.published as published, a.created as created, 
-			  a.checked_out as checked_out, a.checked_out_time as checked_out_time,
+			  a.checked_out as checked_out, a.checked_out_time as checked_out_time, a.ordering as ordering, a.catid as catid,
 			  a.image as imageInfo, a.latitude as latitude, a.longitude as longitude, a.alias as alias, a.language as language')
             ->from($db->quoteName('#__helloworld', 'a'));
 
@@ -128,6 +130,12 @@ class HelloWorldModelHelloWorlds extends JModelList
         $language = $this->getState('filter.language');
         if ($language) {
             $query->where('a.language = ' . $db->quote($language));
+        }
+
+        // Filter by categories
+        $catid = $this->getState('filter.category_id');
+        if ($catid) {
+            $query->where("a.catid = " . $db->quote($db->escape($catid)));
         }
 
         // Add the list ordering clause.

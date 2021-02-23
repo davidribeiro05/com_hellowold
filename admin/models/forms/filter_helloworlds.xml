@@ -27,6 +27,16 @@
             <option value="">JOPTION_SELECT_LANGUAGE</option>
             <option value="*">JALL</option>
         </field>
+        <field
+                name="category_id"
+                type="category"
+                label="JOPTION_FILTER_CATEGORY"
+                extension="com_helloworld"
+                onchange="this.form.submit();"
+                published="0,1,2"
+        >
+            <option value="">JOPTION_SELECT_CATEGORY</option>
+        </field>
     </fields>
     <fields name="list">
         <field
@@ -38,8 +48,10 @@
                 default="greeting ASC"
         >
             <option value="">JGLOBAL_SORT_BY</option>
-            <option value="greeting ASC">COM_HELLOWORLD_ORDERING_ASC</option>
-            <option value="greeting DESC">COM_HELLOWORLD_ORDERING_DESC</option>
+            <option value="ordering ASC">COM_HELLOWORLD_ORDERING_ASC</option>
+            <option value="ordering DESC">COM_HELLOWORLD_ORDERING_DESC</option>
+            <option value="greeting ASC">COM_HELLOWORLD_GREETING_ASC</option>
+            <option value="greeting DESC">COM_HELLOWORLD_GREETING_DESC</option>
             <option value="id ASC">JGRID_HEADING_ID_ASC</option>
             <option value="id DESC">JGRID_HEADING_ID_DESC</option>
             <option value="published ASC">COM_HELLOWORLD_PUBLISHED_ASC</option>

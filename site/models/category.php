@@ -2,11 +2,11 @@
 /**
  * Model for displaying the helloworld messages in a given category
  */
+
 defined('_JEXEC') or die;
 
 class HelloworldModelCategory extends JModelList
 {
-
     public function __construct($config = array())
     {
         if (empty($config['filter_fields'])) {
@@ -14,6 +14,7 @@ class HelloworldModelCategory extends JModelList
                 'id',
                 'greeting',
                 'alias',
+                'ordering',
             );
         }
 
@@ -45,7 +46,7 @@ class HelloworldModelCategory extends JModelList
             $query->where('language IN ("*","' . $lang . '")');
         }
 
-        $orderCol = $this->state->get('list.ordering', 'greeting');
+        $orderCol = $this->state->get('list.ordering', 'ordering');
         $orderDirn = $this->state->get('list.direction', 'asc');
 
         $query->order($db->escape($orderCol) . ' ' . $db->escape($orderDirn));

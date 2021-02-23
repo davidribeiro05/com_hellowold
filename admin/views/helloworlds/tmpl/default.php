@@ -18,6 +18,11 @@ $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
 $user = JFactory::getUser();
 $userId = $user->get('id');
+$saveOrder = $listOrder == 'ordering';
+if ($saveOrder) {
+    $saveOrderingUrl = 'index.php?option=com_helloworld&task=helloworlds.saveOrderAjax&tmpl=component';
+    JHtml::_('sortablelist.sortable', 'helloworldList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
+}
 $assoc = JLanguageAssociations::isEnabled();
 $authorFieldwidth = $assoc ? "10%" : "25%";
 JLoader::register('JHtmlHelloworlds', JPATH_ADMINISTRATOR . '/components/com_helloworld/helpers/html/helloworlds.php');
@@ -38,11 +43,14 @@ JLoader::register('JHtmlHelloworlds', JPATH_ADMINISTRATOR . '/components/com_hel
                 ?>
             </div>
         </div>
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-hover" id="helloworldList">
             <thead>
             <tr>
+                <th width="1%">
+                    <?php echo JHtml::_('searchtools.sort', '', 'ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING', 'icon-menu-2'); ?>
+                </th>
                 <th width="1%"><?php echo JText::_('COM_HELLOWORLD_NUM'); ?></th>
-                <th width="2%">
+                <th width="1%">
                     <?php echo JHtml::_('grid.checkall'); ?>
                 </th>
                 <th width="15%">
@@ -90,7 +98,24 @@ JLoader::register('JHtmlHelloworlds', JPATH_ADMINISTRATOR . '/components/com_hel
                     $row->image = new Registry;
                     $row->image->loadString($row->imageInfo);
                     ?>
-                    <tr>
+                    <tr class="row<?php echo $i % 2; ?>" sortable-group-id="<?php echo $row->catid; ?>">
+                        <td><?php
+                            $iconClass = '';
+                            $canReorder = $user->authorise('core.edit.state', 'com_helloworld.helloworld.' . $row->id);
+                            if (!$canReorder) {
+                                $iconClass = ' inactive';
+                            } elseif (!$saveOrder) {
+                                $iconClass = ' inactive tip-top hasTooltip" title="' . JHtml::_('tooltipText', 'JORDERINGDISABLED');
+                            }
+                            ?>
+                            <span class="sortable-handler<?php echo $iconClass ?>">
+                                    <span class="icon-menu" aria-hidden="true"></span>
+                                </span>
+                            <?php if ($canReorder && $saveOrder) : ?>
+                                <input type="text" style="display:none" name="order[]" size="5"
+                                       value="<?php echo $row->ordering; ?>" class="width-20 text-area-order"/>
+                            <?php endif; ?>
+                        </td>
                         <td><?php echo $this->pagination->getRowOffset($i); ?></td>
                         <td>
                             <?php echo JHtml::_('grid.id', $i, $row->id); ?>
