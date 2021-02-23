@@ -22,12 +22,8 @@ class HelloworldRouter implements JComponentRouterInterface
         $sitemenu = $app->getMenu();
         $thisMenuitem = $sitemenu->getItem($query['Itemid']);
 
-        if ($thisMenuitem->language != $lang) {
-            return $segments;
-        }
-
         if ($thisMenuitem->note == "Ajax") {
-            // We're on the /message menuitem. 
+            // We're on the /message menuitem.
             // Check we've got the right parameters then set url segment = id : alias
             if ($query['view'] == "helloworld" && isset($query['id'])) {
                 // we'll support the passed id being in the form id:alias
@@ -37,7 +33,7 @@ class HelloworldRouter implements JComponentRouterInterface
                 unset($query['catid']);
             }
         } else {
-            // assume we're on the /messages menuitem
+            // assume we're on the /messages menuitem or have /component type of url
             if (($query['view'] == "category") && isset($query['id'])) {
                 // set this part of the url to be of the form /subcat1/subcat2/...
                 $pathSegments = $this->getCategorySegments($query['id']);
@@ -89,11 +85,8 @@ class HelloworldRouter implements JComponentRouterInterface
         $app = JFactory::getApplication();
         $sitemenu = $app->getMenu();
         $activeMenuitem = $sitemenu->getActive();
-        if (!$activeMenuitem) {
-            return $vars;
-        }
 
-        if ($activeMenuitem->note == "Ajax") {
+        if (isset($activeMenuitem) && $activeMenuitem->note == "Ajax") {
             // Expect 1 segment of the form id:alias for the helloworld record
             if ($nSegments == 1) {
                 $vars['id'] = $segments[0];
@@ -147,6 +140,49 @@ class HelloworldRouter implements JComponentRouterInterface
 
     public function preprocess($query)
     {
+        static $currentLang = null;
+        if (JLanguageAssociations::isEnabled()) {
+            $app = JFactory::getApplication();
+            $sitemenu = $app->getMenu();
+            $lang = $query['lang'];
+
+            if (!isset($query['lang']) || ($query['lang'] == $currentLang)) {
+                return $query;
+            }
+
+            if (!isset($query['Itemid'])) {  // we're currently on /component type of URL
+                // use the home page for the URL's language
+                $home = $sitemenu->getItems(array('language', 'home'), array($lang, true));
+                if ($home) {
+                    $query['Itemid'] = $home[0]->id;
+                }
+                return $query;
+            }
+
+            $itemid = $query['Itemid'];
+
+            // ensure the menuitem for Itemid has the correct language
+            $thismenuitem = $sitemenu->getItem($itemid);
+            $thismenuitemLang = $thismenuitem->language;
+            if ($thismenuitemLang == $lang) {
+                $currentLang = $thismenuitemLang;
+            }
+            if ($thismenuitemLang == $lang || $thismenuitemLang == '*') {
+                return $query;
+            }
+
+            // if not, try to find an associated menuitem with the correct language
+            $associations = JLanguageAssociations::getAssociations('com_menus', '#__menu', 'com_menus.item', $itemid, 'id', '', '');
+            if (isset($associations[$lang])) {
+                $query['Itemid'] = (int) $associations[$lang]->id;
+                return $query;
+            } else { // use the home page for that language (if it's set)
+                $home = $sitemenu->getItems(array('language', 'home'), array($lang, true));
+                if ($home) {
+                    $query['Itemid'] = $home[0]->id;
+                }
+            }
+        }
         return $query;
     }
 }

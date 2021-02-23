@@ -5,6 +5,8 @@ CREATE TABLE `#__helloworld` (
 	`asset_id` INT(10)     NOT NULL DEFAULT '0',
 	`created`  DATETIME    NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`created_by`  INT(10) UNSIGNED NOT NULL DEFAULT '0',
+	`checked_out` INT(10) NOT NULL DEFAULT '0',
+	`checked_out_time` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`greeting` VARCHAR(25) NOT NULL,
 	`alias`  VARCHAR(40)  NOT NULL DEFAULT '',
         `language`  CHAR(7)  NOT NULL DEFAULT '*',  

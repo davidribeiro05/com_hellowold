@@ -42,43 +42,43 @@ JLoader::register('JHtmlHelloworlds', JPATH_ADMINISTRATOR . '/components/com_hel
                 <tr>
                     <th width="1%"><?php echo JText::_('COM_HELLOWORLD_NUM'); ?></th>
                     <th width="2%">
-                        <?php echo JHtml::_('grid.checkall'); ?>
+<?php echo JHtml::_('grid.checkall'); ?>
                     </th>
                     <th width="15%">
-                        <?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_HELLOWORLDS_NAME', 'greeting', $listDirn, $listOrder); ?>
+<?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_HELLOWORLDS_NAME', 'greeting', $listDirn, $listOrder); ?>
                     </th>
                     <th width="15%">
-                        <?php echo JText::_('COM_HELLOWORLD_HELLOWORLDS_POSITION'); ?>
+<?php echo JText::_('COM_HELLOWORLD_HELLOWORLDS_POSITION'); ?>
                     </th>
                     <th width="15%">
-                        <?php echo JText::_('COM_HELLOWORLD_HELLOWORLDS_IMAGE'); ?>
+                    <?php echo JText::_('COM_HELLOWORLD_HELLOWORLDS_IMAGE'); ?>
                     </th>
-                    <?php if ($assoc) : ?>
+                        <?php if ($assoc) : ?>
                         <th width="15%">
-                            <?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_HELLOWORLDS_ASSOCIATIONS', 'association', $listDirn, $listOrder); ?>
+                        <?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_HELLOWORLDS_ASSOCIATIONS', 'association', $listDirn, $listOrder); ?>
                         </th>
-                    <?php endif; ?>
+                        <?php endif; ?>
                     <th width="<?php echo $authorFieldwidth; ?>">
-                        <?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_AUTHOR', 'author', $listDirn, $listOrder); ?>
+<?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_AUTHOR', 'author', $listDirn, $listOrder); ?>
                     </th>
                     <th width="10%">
-                        <?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_LANGUAGE', 'language', $listDirn, $listOrder); ?>
+<?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_LANGUAGE', 'language', $listDirn, $listOrder); ?>
                     </th>
                     <th width="10%">
-                        <?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_CREATED_DATE', 'created', $listDirn, $listOrder); ?>
+<?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_CREATED_DATE', 'created', $listDirn, $listOrder); ?>
                     </th>
                     <th width="5%">
-                        <?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_PUBLISHED', 'published', $listDirn, $listOrder); ?>
+<?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_PUBLISHED', 'published', $listDirn, $listOrder); ?>
                     </th>
                     <th width="2%">
-                        <?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_ID', 'id', $listDirn, $listOrder); ?>
+<?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_ID', 'id', $listDirn, $listOrder); ?>
                     </th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
                     <td colspan="5">
-                        <?php echo $this->pagination->getListFooter(); ?>
+<?php echo $this->pagination->getListFooter(); ?>
                     </td>
                 </tr>
             </tfoot>
@@ -94,7 +94,7 @@ JLoader::register('JHtmlHelloworlds', JPATH_ADMINISTRATOR . '/components/com_hel
                         <tr>
                             <td><?php echo $this->pagination->getRowOffset($i); ?></td>
                             <td>
-                                <?php echo JHtml::_('grid.id', $i, $row->id); ?>
+                                    <?php echo JHtml::_('grid.id', $i, $row->id); ?>
                             </td>
                             <td>
                                 <a href="<?php echo $link; ?>" title="<?php echo JText::_('COM_HELLOWORLD_EDIT_HELLOWORLD'); ?>">
@@ -104,7 +104,7 @@ JLoader::register('JHtmlHelloworlds', JPATH_ADMINISTRATOR . '/components/com_hel
                                     <?php echo JText::sprintf('JGLOBAL_LIST_ALIAS', $this->escape($row->alias)); ?>
                                 </span>
                                 <div class="small">
-                                    <?php echo JText::_('JCATEGORY') . ': ' . $this->escape($row->category_title); ?>
+                                <?php echo JText::_('JCATEGORY') . ': ' . $this->escape($row->category_title); ?>
                                 </div>
                             </td>
                             <td align="center">
@@ -123,9 +123,9 @@ JLoader::register('JHtmlHelloworlds', JPATH_ADMINISTRATOR . '/components/com_hel
                                 <td align="center">
                                     <?php if ($row->association) : ?>
                                         <?php echo JHtml::_('helloworlds.association', $row->id); ?>
-                                    <?php endif; ?>
+            <?php endif; ?>
                                 </td>
-                            <?php endif; ?>
+                                <?php endif; ?>
                             <td align="center">
                                 <?php echo $row->author; ?>
                             </td>
@@ -136,18 +136,18 @@ JLoader::register('JHtmlHelloworlds', JPATH_ADMINISTRATOR . '/components/com_hel
                                 <?php echo substr($row->created, 0, 10); ?>
                             </td>
                             <td align="center">
-                                <?php echo JHtml::_('jgrid.published', $row->published, $i, 'helloworlds.', true, 'cb'); ?>
+                        <?php echo JHtml::_('jgrid.published', $row->published, $i, 'helloworlds.', true, 'cb'); ?>
                             </td>
                             <td align="center">
-                                <?php echo $row->id; ?>
+        <?php echo $row->id; ?>
                             </td>
                         </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
             </tbody>
         </table>
         <input type="hidden" name="task" value=""/>
         <input type="hidden" name="boxchecked" value="0"/>
-        <?php echo JHtml::_('form.token'); ?>
+<?php echo JHtml::_('form.token'); ?>
     </div>
 </form>
