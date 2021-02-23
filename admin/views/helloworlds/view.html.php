@@ -28,7 +28,7 @@ class HelloWorldViewHelloWorlds extends JViewLegacy
     {
         // Get application
         $app = JFactory::getApplication();
-        $context = "helloworld.list.admin.helloworld";
+
         // Get data from the model
         $this->items = $this->get('Items');
         $this->pagination = $this->get('Pagination');
@@ -50,6 +50,16 @@ class HelloWorldViewHelloWorlds extends JViewLegacy
         if ($this->getLayout() !== 'modal') {
             HelloWorldHelper::addSubmenu('helloworlds');
             $this->addToolBar();
+        } else {
+            // If it's being displayed to select a record as an association, then forcedLanguage is set
+            if ($forcedLanguage = $app->input->get('forcedLanguage', '', 'CMD')) {
+                // Transform the language selector filter into an hidden field, so it can't be set
+                $languageXml = new SimpleXMLElement('<field name="language" type="hidden" default="' . $forcedLanguage . '" />');
+                $this->filterForm->setField($languageXml, 'filter', true);
+
+                // Also, unset the active language filter so the search tools is not open by default with this filter.
+                unset($this->activeFilters['language']);
+            }
         }
 
         // Display the template

@@ -22,6 +22,7 @@ class JFormFieldModal_Helloworld extends JFormField
         $value = (int) $this->value > 0 ? (int) $this->value : '';
 
         // $this->id will be jform_request_xxx where xxx is the name of the field in the xml file
+        // or jform_associations_xx_yy where xx_yy is the language code (hyphen replaced by underscore) for associations
         $modalId = 'Helloworld_' . $this->id;
 
         // Add the modal field script to the document head.
@@ -84,6 +85,13 @@ class JFormFieldModal_Helloworld extends JFormField
 
         // title to go in the modal header
         $modalTitle = JText::_('COM_HELLOWORLD_MENUITEM_SELECT_MODAL_TITLE');
+
+        // if the form definition has a 'language' field then it's for the association
+        // add the forcedLanguage parameter to the URL, and add the language to the modal title
+        if (isset($this->element['language'])) {
+            $urlSelect .= '&amp;forcedLanguage=' . $this->element['language'];
+            $modalTitle .= ' &#8212; ' . $this->element['label'];
+        }
 
         // html to set up the modal iframe
         $html .= JHtml::_(

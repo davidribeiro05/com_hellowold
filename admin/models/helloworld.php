@@ -19,9 +19,13 @@ use Joomla\Registry\Registry;
 class HelloWorldModelHelloWorld extends JModelAdmin
 {
 
+    // JModelAdmin needs to know this for storing the associations 
+    protected $associationsContext = 'com_helloworld.item';
+
     /**
      * Method to override getItem to allow us to convert the JSON-encoded image information
      * in the database record into an array for subsequent prefilling of the edit form
+     * We also use this method to prefill the associations
      */
     public function getItem($pk = null)
     {
@@ -29,6 +33,19 @@ class HelloWorldModelHelloWorld extends JModelAdmin
         if ($item AND property_exists($item, 'image')) {
             $registry = new Registry($item->image);
             $item->imageinfo = $registry->toArray();
+        }
+
+        // Load associated items
+        if (JLanguageAssociations::isEnabled()) {
+            $item->associations = array();
+
+            if ($item->id != null) {
+                $associations = JLanguageAssociations::getAssociations('com_helloworld', '#__helloworld', 'com_helloworld.item', (int) $item->id);
+
+                foreach ($associations as $tag => $association) {
+                    $item->associations[$tag] = $association->id;
+                }
+            }
         }
         return $item;
     }
@@ -63,9 +80,11 @@ class HelloWorldModelHelloWorld extends JModelAdmin
     {
         // Get the form.
         $form = $this->loadForm(
-            'com_helloworld.helloworld', 'helloworld', array(
-            'control' => 'jform',
-            'load_data' => $loadData
+            'com_helloworld.helloworld',
+            'helloworld',
+            array(
+                'control' => 'jform',
+                'load_data' => $loadData
             )
         );
 
@@ -77,7 +96,40 @@ class HelloWorldModelHelloWorld extends JModelAdmin
     }
 
     /**
-     * Method to get the script that have to be included on the form
+     * Method to preprocess the form to add the association fields dynamically
+     *
+     * @return     none
+     */
+    protected function preprocessForm(JForm $form, $data, $group = 'helloworld')
+    {
+        // Association content items
+        if (JLanguageAssociations::isEnabled()) {
+            $languages = JLanguageHelper::getContentLanguages(false, true, null, 'ordering', 'asc');
+
+            if (count($languages) > 1) {
+                $addform = new SimpleXMLElement('<form />');
+                $fields = $addform->addChild('fields');
+                $fields->addAttribute('name', 'associations');
+                $fieldset = $fields->addChild('fieldset');
+                $fieldset->addAttribute('name', 'item_associations');
+
+                foreach ($languages as $language) {
+                    $field = $fieldset->addChild('field');
+                    $field->addAttribute('name', $language->lang_code);
+                    $field->addAttribute('type', 'modal_helloworld');
+                    $field->addAttribute('language', $language->lang_code);
+                    $field->addAttribute('label', $language->title);
+                    $field->addAttribute('translate_label', 'false');
+                }
+
+                $form->load($addform, false);
+            }
+        }
+        parent::preprocessForm($form, $data, $group);
+    }
+
+    /**
+     * Method to get the script to be included on the form
      *
      * @return string	Script files
      */
@@ -97,7 +149,8 @@ class HelloWorldModelHelloWorld extends JModelAdmin
     {
         // Check the session for previously entered form data.
         $data = JFactory::getApplication()->getUserState(
-            'com_helloworld.edit.helloworld.data', array()
+            'com_helloworld.edit.helloworld.data',
+            array()
         );
 
         if (empty($data)) {

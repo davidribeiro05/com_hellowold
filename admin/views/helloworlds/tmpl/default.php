@@ -15,6 +15,9 @@ JHtml::_('formbehavior.chosen', 'select');
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
+$assoc = JLanguageAssociations::isEnabled();
+$authorFieldwidth = $assoc ? "10%" : "25%";
+JLoader::register('JHtmlHelloworlds', JPATH_ADMINISTRATOR . '/components/com_helloworld/helpers/html/helloworlds.php');
 
 ?>
 <form action="index.php?option=com_helloworld&view=helloworlds" method="post" id="adminForm" name="adminForm">
@@ -50,13 +53,18 @@ $listDirn = $this->escape($this->state->get('list.direction'));
                     <th width="15%">
                         <?php echo JText::_('COM_HELLOWORLD_HELLOWORLDS_IMAGE'); ?>
                     </th>
-                    <th width="15%">
+                    <?php if ($assoc) : ?>
+                        <th width="15%">
+                            <?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_HELLOWORLDS_ASSOCIATIONS', 'association', $listDirn, $listOrder); ?>
+                        </th>
+                    <?php endif; ?>
+                    <th width="<?php echo $authorFieldwidth; ?>">
                         <?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_AUTHOR', 'author', $listDirn, $listOrder); ?>
                     </th>
-                    <th width="15%">
+                    <th width="10%">
                         <?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_LANGUAGE', 'language', $listDirn, $listOrder); ?>
                     </th>
-                    <th width="15%">
+                    <th width="10%">
                         <?php echo JHtml::_('searchtools.sort', 'COM_HELLOWORLD_CREATED_DATE', 'created', $listDirn, $listOrder); ?>
                     </th>
                     <th width="5%">
@@ -111,6 +119,13 @@ $listDirn = $this->escape($this->state->get('list.direction'));
 
                                 ?>
                             </td>
+                            <?php if ($assoc) : ?>
+                                <td align="center">
+                                    <?php if ($row->association) : ?>
+                                        <?php echo JHtml::_('helloworlds.association', $row->id); ?>
+                                    <?php endif; ?>
+                                </td>
+                            <?php endif; ?>
                             <td align="center">
                                 <?php echo $row->author; ?>
                             </td>

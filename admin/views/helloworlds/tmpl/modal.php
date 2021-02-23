@@ -140,6 +140,7 @@ $onclick = $this->escape($function);
         </table>
         <input type="hidden" name="task" value=""/>
         <input type="hidden" name="boxchecked" value="0"/>
+        <input type="hidden" name="forcedLanguage" value="<?php echo $app->input->get('forcedLanguage', '', 'CMD'); ?>" />
 <?php echo JHtml::_('form.token'); ?>
     </form>
 </div>

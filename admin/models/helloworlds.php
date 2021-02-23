@@ -34,11 +34,35 @@ class HelloWorldModelHelloWorlds extends JModelList
                 'author',
                 'created',
                 'language',
+                'association',
                 'published'
             );
         }
 
         parent::__construct($config);
+    }
+
+    protected function populateState($ordering = null, $direction = null)
+    {
+        $app = JFactory::getApplication();
+
+        // Adjust the context to support modal layouts.
+        if ($layout = $app->input->get('layout')) {
+            $this->context .= '.' . $layout;
+        }
+
+        // Adjust the context to support forced languages.
+        $forcedLanguage = $app->input->get('forcedLanguage', '', 'CMD');
+        if ($forcedLanguage) {
+            $this->context .= '.' . $forcedLanguage;
+        }
+
+        parent::populateState($ordering, $direction);
+
+        // If there's a forced language then define that filter for the query where clause
+        if (!empty($forcedLanguage)) {
+            $this->setState('filter.language', $forcedLanguage);
+        }
     }
 
     /**
@@ -70,6 +94,14 @@ class HelloWorldModelHelloWorlds extends JModelList
         // we can use the little com_content layout to display the map symbol
         $query->select($db->quoteName('l.title', 'language_title') . "," . $db->quoteName('l.image', 'language_image'))
             ->join('LEFT', $db->quoteName('#__languages', 'l') . ' ON l.lang_code = a.language');
+
+        // Join over the associations - we just want to know if there are any, at this stage
+        if (JLanguageAssociations::isEnabled()) {
+            $query->select('COUNT(asso2.id)>1 as association')
+                ->join('LEFT', '#__associations AS asso ON asso.id = a.id AND asso.context=' . $db->quote('com_helloworld.item'))
+                ->join('LEFT', '#__associations AS asso2 ON asso2.key = asso.key')
+                ->group('a.id');
+        }
 
         // Filter: like / search
         $search = $this->getState('filter.search');
