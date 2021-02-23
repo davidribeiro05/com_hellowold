@@ -77,6 +77,7 @@ class HelloWorldModelHelloWorlds extends JModelList
 
         // Create the base select statement.
         $query->select('a.id as id, a.greeting as greeting, a.published as published, a.created as created, 
+			  a.checked_out as checked_out, a.checked_out_time as checked_out_time,
 			  a.image as imageInfo, a.latitude as latitude, a.longitude as longitude, a.alias as alias, a.language as language')
             ->from($db->quoteName('#__helloworld', 'a'));
 
@@ -87,6 +88,10 @@ class HelloWorldModelHelloWorlds extends JModelList
         // Join with users table to get the username of the author
         $query->select($db->quoteName('u.username', 'author'))
             ->join('LEFT', $db->quoteName('#__users', 'u') . ' ON u.id = a.created_by');
+
+        // Join with users table to get the username of the person who checked the record out
+        $query->select($db->quoteName('u2.username', 'editor'))
+            ->join('LEFT', $db->quoteName('#__users', 'u2') . ' ON u2.id = a.checked_out');
 
         // Join with languages table to get the language title and image to display
         // Put these into fields called language_title and language_image so that

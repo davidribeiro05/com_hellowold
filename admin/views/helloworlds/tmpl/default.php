@@ -16,6 +16,8 @@ JHtml::_('formbehavior.chosen', 'select');
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
+$user = JFactory::getUser();
+$userId = $user->get('id');
 $assoc = JLanguageAssociations::isEnabled();
 $authorFieldwidth = $assoc ? "10%" : "25%";
 JLoader::register('JHtmlHelloworlds', JPATH_ADMINISTRATOR . '/components/com_helloworld/helpers/html/helloworlds.php');
@@ -94,6 +96,10 @@ JLoader::register('JHtmlHelloworlds', JPATH_ADMINISTRATOR . '/components/com_hel
                             <?php echo JHtml::_('grid.id', $i, $row->id); ?>
                         </td>
                         <td>
+                            <?php if ($row->checked_out) : ?>
+                                <?php $canCheckin = $user->authorise('core.manage', 'com_checkin') || $row->checked_out == $userId; ?>
+                                <?php echo JHtml::_('jgrid.checkedout', $i, $row->editor, $row->checked_out_time, 'helloworlds.', $canCheckin); ?>
+                            <?php endif; ?>
                             <a href="<?php echo $link; ?>"
                                title="<?php echo JText::_('COM_HELLOWORLD_EDIT_HELLOWORLD'); ?>">
                                 <?php echo $row->greeting; ?>

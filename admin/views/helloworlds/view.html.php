@@ -94,6 +94,9 @@ class HelloWorldViewHelloWorlds extends JViewLegacy
         if ($this->canDo->get('core.delete')) {
             JToolBarHelper::deleteList('', 'helloworlds.delete', 'JTOOLBAR_DELETE');
         }
+        if ($this->canDo->get('core.edit') || JFactory::getUser()->authorise('core.manage', 'com_checkin')) {
+            JToolBarHelper::checkin('helloworlds.checkin');
+        }
         if ($this->canDo->get('core.admin')) {
             JToolBarHelper::divider();
             JToolBarHelper::preferences('com_helloworld');
