@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_helloworld
@@ -15,7 +14,8 @@ defined('_JEXEC') or die('Restricted access');
  *
  * @since  0.0.1
  */
-class HelloWorldViewHelloWorlds extends JViewLegacy {
+class HelloWorldViewHelloWorlds extends JViewLegacy
+{
 
     /**
      * Display the Hello World view
@@ -24,8 +24,8 @@ class HelloWorldViewHelloWorlds extends JViewLegacy {
      *
      * @return  void
      */
-    function display($tpl = null) {
-
+    function display($tpl = null)
+    {
         // Get application
         $app = JFactory::getApplication();
         $context = "helloworld.list.admin.helloworld";
@@ -33,9 +33,6 @@ class HelloWorldViewHelloWorlds extends JViewLegacy {
         $this->items = $this->get('Items');
         $this->pagination = $this->get('Pagination');
         $this->state = $this->get('State');
-        // Remove the old ordering mechanism
-        //$this->filter_order 	= $app->getUserStateFromRequest($context.'filter_order', 'filter_order', 'greeting', 'cmd');
-        //$this->filter_order_Dir = $app->getUserStateFromRequest($context.'filter_order_Dir', 'filter_order_Dir', 'asc', 'cmd');
         $this->filterForm = $this->get('FilterForm');
         $this->activeFilters = $this->get('ActiveFilters');
 
@@ -49,11 +46,11 @@ class HelloWorldViewHelloWorlds extends JViewLegacy {
             return false;
         }
 
-        // Set the submenu
-        HelloWorldHelper::addSubmenu('helloworlds');
-
-        // Set the toolbar and number of found items
-        $this->addToolBar();
+        // Set the sidebar submenu and toolbar, but not on the modal window
+        if ($this->getLayout() !== 'modal') {
+            HelloWorldHelper::addSubmenu('helloworlds');
+            $this->addToolBar();
+        }
 
         // Display the template
         parent::display($tpl);
@@ -69,7 +66,8 @@ class HelloWorldViewHelloWorlds extends JViewLegacy {
      *
      * @since   1.6
      */
-    protected function addToolBar() {
+    protected function addToolBar()
+    {
         $title = JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLDS');
 
         if ($this->pagination->total) {
@@ -97,9 +95,9 @@ class HelloWorldViewHelloWorlds extends JViewLegacy {
      *
      * @return void
      */
-    protected function setDocument() {
+    protected function setDocument()
+    {
         $document = JFactory::getDocument();
         $document->setTitle(JText::_('COM_HELLOWORLD_ADMINISTRATION'));
     }
-
 }
