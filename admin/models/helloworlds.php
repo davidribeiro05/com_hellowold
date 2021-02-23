@@ -16,11 +16,10 @@ defined('_JEXEC') or die('Restricted access');
  */
 class HelloWorldModelHelloWorlds extends JModelList
 {
-
     /**
      * Constructor.
      *
-     * @param   array  $config  An optional associative array of configuration settings.
+     * @param array $config An optional associative array of configuration settings.
      *
      * @see     JController
      * @since   1.6
@@ -90,7 +89,7 @@ class HelloWorldModelHelloWorlds extends JModelList
             ->join('LEFT', $db->quoteName('#__users', 'u') . ' ON u.id = a.created_by');
 
         // Join with languages table to get the language title and image to display
-        // Put these into fields called language_title and language_image so that 
+        // Put these into fields called language_title and language_image so that
         // we can use the little com_content layout to display the map symbol
         $query->select($db->quoteName('l.title', 'language_title') . "," . $db->quoteName('l.image', 'language_image'))
             ->join('LEFT', $db->quoteName('#__languages', 'l') . ' ON l.lang_code = a.language');
@@ -115,7 +114,7 @@ class HelloWorldModelHelloWorlds extends JModelList
         $published = $this->getState('filter.published');
 
         if (is_numeric($published)) {
-            $query->where('a.published = ' . (int) $published);
+            $query->where('a.published = ' . (int)$published);
         } elseif ($published === '') {
             $query->where('(a.published IN (0, 1))');
         }

@@ -1,4 +1,5 @@
 <?php
+
 defined('JPATH_BASE') or die;
 
 /**
@@ -7,7 +8,6 @@ defined('JPATH_BASE') or die;
  */
 class JFormFieldModal_Helloworld extends JFormField
 {
-
     /**
      * Method to get the html for the input field.
      *
@@ -19,7 +19,7 @@ class JFormFieldModal_Helloworld extends JFormField
         JFactory::getLanguage()->load('com_helloworld', JPATH_ADMINISTRATOR);
 
         // $this->value is set if there's a default id specified in the xml file
-        $value = (int) $this->value > 0 ? (int) $this->value : '';
+        $value = (int)$this->value > 0 ? (int)$this->value : '';
 
         // $this->id will be jform_request_xxx where xxx is the name of the field in the xml file
         // or jform_associations_xx_yy where xx_yy is the language code (hyphen replaced by underscore) for associations
@@ -42,7 +42,7 @@ class JFormFieldModal_Helloworld extends JFormField
             $query = $db->getQuery(true)
                 ->select($db->quoteName('greeting'))
                 ->from($db->quoteName('#__helloworld'))
-                ->where($db->quoteName('id') . ' = ' . (int) $value);
+                ->where($db->quoteName('id') . ' = ' . (int)$value);
             $db->setQuery($query);
 
             try {
@@ -95,17 +95,17 @@ class JFormFieldModal_Helloworld extends JFormField
 
         // html to set up the modal iframe
         $html .= JHtml::_(
-                'bootstrap.renderModal',
-                'ModalSelect' . $modalId,
-                array(
-                    'title' => $modalTitle,
-                    'url' => $urlSelect,
-                    'height' => '400px',
-                    'width' => '800px',
-                    'bodyHeight' => '70',
-                    'modalWidth' => '80',
-                    'footer' => '<a role="button" class="btn" data-dismiss="modal" aria-hidden="true">' . JText::_('JLIB_HTML_BEHAVIOR_CLOSE') . '</a>',
-                )
+            'bootstrap.renderModal',
+            'ModalSelect' . $modalId,
+            array(
+                'title' => $modalTitle,
+                'url' => $urlSelect,
+                'height' => '400px',
+                'width' => '800px',
+                'bodyHeight' => '70',
+                'modalWidth' => '80',
+                'footer' => '<a role="button" class="btn" data-dismiss="modal" aria-hidden="true">' . JText::_('JLIB_HTML_BEHAVIOR_CLOSE') . '</a>',
+            )
         );
 
         // class='required' for client side validation.
@@ -113,7 +113,7 @@ class JFormFieldModal_Helloworld extends JFormField
 
         // hidden input field to store the helloworld record id
         $html .= '<input type="hidden" id="' . $this->id . '_id" ' . $class
-            . ' data-required="' . (int) $this->required . '" name="' . $this->name
+            . ' data-required="' . (int)$this->required . '" name="' . $this->name
             . '" data-text="' . htmlspecialchars(JText::_('COM_HELLOWORLD_MENUITEM_SELECT_HELLOWORLD', true), ENT_COMPAT, 'UTF-8')
             . '" value="' . $value . '" />';
 

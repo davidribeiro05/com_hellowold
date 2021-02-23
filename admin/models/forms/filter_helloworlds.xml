@@ -2,27 +2,27 @@
 <form>
     <fields name="filter">
         <field
-            name="search"
-            type="text"
-            label="COM_BANNERS_SEARCH_IN_TITLE"
-            hint="JSEARCH_FILTER"
-            class="js-stools-search-string"
+                name="search"
+                type="text"
+                label="COM_BANNERS_SEARCH_IN_TITLE"
+                hint="JSEARCH_FILTER"
+                class="js-stools-search-string"
         />
         <field
-            name="published"
-            type="status"
-            label="JOPTION_SELECT_PUBLISHED"
-            description="JOPTION_SELECT_PUBLISHED_DESC"
-            onchange="this.form.submit();"
+                name="published"
+                type="status"
+                label="JOPTION_SELECT_PUBLISHED"
+                description="JOPTION_SELECT_PUBLISHED_DESC"
+                onchange="this.form.submit();"
         >
             <option value="">JOPTION_SELECT_PUBLISHED</option>
         </field>
         <field
-            name="language"
-            type="contentlanguage"
-            label="JOPTION_FILTER_LANGUAGE"
-            description="JOPTION_FILTER_LANGUAGE_DESC"
-            onchange="this.form.submit();"
+                name="language"
+                type="contentlanguage"
+                label="JOPTION_FILTER_LANGUAGE"
+                description="JOPTION_FILTER_LANGUAGE_DESC"
+                onchange="this.form.submit();"
         >
             <option value="">JOPTION_SELECT_LANGUAGE</option>
             <option value="*">JALL</option>
@@ -30,12 +30,12 @@
     </fields>
     <fields name="list">
         <field
-            name="fullordering"
-            type="list"
-            label="COM_HELLOWORLD_LIST_FULL_ORDERING"
-            description="COM_HELLOWORLD_LIST_FULL_ORDERING_DESC"
-            onchange="this.form.submit();"
-            default="greeting ASC"
+                name="fullordering"
+                type="list"
+                label="COM_HELLOWORLD_LIST_FULL_ORDERING"
+                description="COM_HELLOWORLD_LIST_FULL_ORDERING_DESC"
+                onchange="this.form.submit();"
+                default="greeting ASC"
         >
             <option value="">JGLOBAL_SORT_BY</option>
             <option value="greeting ASC">COM_HELLOWORLD_ORDERING_ASC</option>
@@ -54,13 +54,13 @@
             <option value="association DESC">COM_HELLOWORLD_ASSOCIATION_DESC</option>
         </field>
         <field
-            name="limit"
-            type="limitbox"
-            class="input-mini"
-            default="25"
-            label="COM_CONTENT_LIST_LIMIT"
-            description="COM_HELLOWORLD_LIST_LIMIT_DESC"
-            onchange="this.form.submit();"
+                name="limit"
+                type="limitbox"
+                class="input-mini"
+                default="25"
+                label="COM_CONTENT_LIST_LIMIT"
+                description="COM_HELLOWORLD_LIST_LIMIT_DESC"
+                onchange="this.form.submit();"
         />
     </fields>
 </form>

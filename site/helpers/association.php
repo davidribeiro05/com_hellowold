@@ -2,6 +2,7 @@
 /**
  * Helper file for Helloworld Associations (on the site part)
  */
+
 defined('_JEXEC') or die;
 
 JLoader::register('CategoryHelperAssociation', JPATH_ADMINISTRATOR . '/components/com_categories/helpers/association.php');
@@ -12,12 +13,11 @@ JLoader::register('CategoryHelperAssociation', JPATH_ADMINISTRATOR . '/component
  */
 abstract class HelloworldHelperAssociation extends CategoryHelperAssociation
 {
-
     /**
      * Method to get the associations for a given item
      *
-     * @param   integer  $id    Id of the item (helloworld id or catid, depending on view)
-     * @param   string   $view  Name of the view ('helloworld' or 'category')
+     * @param integer $id Id of the item (helloworld id or catid, depending on view)
+     * @param string $view Name of the view ('helloworld' or 'category')
      *
      * @return  array   Array of associations for the item
      */

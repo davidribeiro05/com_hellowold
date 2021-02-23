@@ -2,13 +2,13 @@
 /**
  * The Helloworld helper file for Multilingual Associations
  */
+
 defined('_JEXEC') or die;
 
 JTable::addIncludePath(__DIR__ . '/../tables');
 
 class HelloworldAssociationsHelper extends JAssociationExtensionHelper
 {
-
     /**
      * The extension name
      */
@@ -27,8 +27,8 @@ class HelloworldAssociationsHelper extends JAssociationExtensionHelper
     /**
      * Get the associated items for an item
      *
-     * @param   string  $typeName  The item type, either 'helloworld' or 'category'
-     * @param   int     $id        The id of item for which we need the associated items
+     * @param string $typeName The item type, either 'helloworld' or 'category'
+     * @param int $id The id of item for which we need the associated items
      *
      */
     public function getAssociations($typeName, $id)
@@ -50,13 +50,13 @@ class HelloworldAssociationsHelper extends JAssociationExtensionHelper
 
         // Get the associations.
         $associations = JLanguageAssociations::getAssociations(
-                $this->extension,
-                $type['tables']['a'],
-                $context,
-                $id,
-                'id',
-                'alias',
-                $catidField
+            $this->extension,
+            $type['tables']['a'],
+            $context,
+            $id,
+            'id',
+            'alias',
+            $catidField
         );
 
         return $associations;
@@ -65,8 +65,8 @@ class HelloworldAssociationsHelper extends JAssociationExtensionHelper
     /**
      * Get item information
      *
-     * @param   string  $typeName  The item type
-     * @param   int     $id        The id of item for which we need the associated items
+     * @param string $typeName The item type
+     * @param int $id The id of item for which we need the associated items
      *
      * @return  JTable object associated with the record id passed in
      */
@@ -100,7 +100,7 @@ class HelloworldAssociationsHelper extends JAssociationExtensionHelper
     /**
      * Get information about the type
      *
-     * @param   string  $typeName  The item type
+     * @param string $typeName The item type
      *
      * @return  array  Array of item types
      */

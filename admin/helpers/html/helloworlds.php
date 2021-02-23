@@ -2,17 +2,17 @@
 /**
  * Helper file for outputting html associated with the helloworld administrator functionality
  */
+
 defined('_JEXEC') or die;
 
 JLoader::register('HelloworldHelper', JPATH_ADMINISTRATOR . '/components/com_helloworld/helpers/helloworld.php');
 
 class JHtmlHelloworlds
 {
-
     /**
      * Render the list of associated items
      *
-     * @param   integer  $id  The id of the helloworld record
+     * @param integer $id The id of the helloworld record
      *
      * @return  string  The language HTML
      *
@@ -24,9 +24,9 @@ class JHtmlHelloworlds
         $html = '';
 
         // Get the associations
-        if ($associations = JLanguageAssociations::getAssociations('com_helloworld', '#__helloworld', 'com_helloworld.item', (int) $id)) {
+        if ($associations = JLanguageAssociations::getAssociations('com_helloworld', '#__helloworld', 'com_helloworld.item', (int)$id)) {
             foreach ($associations as $tag => $associated) {
-                $associations[$tag] = (int) $associated->id;
+                $associations[$tag] = (int)$associated->id;
             }
 
             // get the relevant category titles and languages, for the tooltip
@@ -53,7 +53,7 @@ class JHtmlHelloworlds
             if ($items) {
                 foreach ($items as &$item) {
                     $text = $item->lang_sef ? strtoupper($item->lang_sef) : 'XX';
-                    $url = JRoute::_('index.php?option=com_helloworld&task=helloworld.edit&id=' . (int) $item->id);
+                    $url = JRoute::_('index.php?option=com_helloworld&task=helloworld.edit&id=' . (int)$item->id);
 
                     $tooltip = htmlspecialchars($item->greeting, ENT_QUOTES, 'UTF-8') . '<br />' . JText::sprintf('JCATEGORY_SPRINTF', $item->category_title);
                     $classes = 'hasPopover label label-association label-' . $item->lang_sef;

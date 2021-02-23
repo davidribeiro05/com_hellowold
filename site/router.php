@@ -1,4 +1,5 @@
 <?php
+
 defined('_JEXEC') or die;
 
 class HelloworldRouter implements JComponentRouterInterface
@@ -42,7 +43,7 @@ class HelloworldRouter implements JComponentRouterInterface
                     unset($query['id']);
                 }
             } elseif ($query['view'] == "helloworld" && isset($query['catid']) && isset($query['id'])) {
-                // set this part of the url to be of the form /subcat1/subcat2/.../hello-world 
+                // set this part of the url to be of the form /subcat1/subcat2/.../hello-world
                 $pathSegments = $this->getCategorySegments($query['catid']);
                 if ($pathSegments) {
                     $segments = $pathSegments;
@@ -58,10 +59,11 @@ class HelloworldRouter implements JComponentRouterInterface
         unset($query['view']);
         return $segments;
     }
+
     /*
      * This function take a category id and finds the path from that category to the root of the category tree
      * The path returned from getPath() is an associative array of key = category id, value = id:alias
-     * If no valid category is found from the passed-in category id then null is returned. 
+     * If no valid category is found from the passed-in category id then null is returned.
      */
 
     private function getCategorySegments($catid)
@@ -105,15 +107,18 @@ class HelloworldRouter implements JComponentRouterInterface
                 $matchingCategory = $this->match($children, $segments[$i]);
                 if ($matchingCategory) {
                     $catid = $matchingCategory->id;
-                    if ($i == $nSegments - 1) {    // we're done, all segments are categories
+                    if ($i == $nSegments - 1)    // we're done, all segments are categories
+                    {
                         $vars['view'] = 'category';
                         $vars['id'] = $catid;
                     }
                 } else {
-                    if ($i == $nSegments - 1) {   // all but last segment are categories
+                    if ($i == $nSegments - 1)   // all but last segment are categories
+                    {
                         $vars['id'] = $segments[$i];
                         $vars['view'] = 'helloworld';
-                    } else {   // something went wrong - didn't get a match at this level
+                    } else   // something went wrong - didn't get a match at this level
+                    {
                         break;
                     }
                 }
@@ -122,12 +127,12 @@ class HelloworldRouter implements JComponentRouterInterface
 
         return $vars;
     }
+
     /*
      * This function takes an array of categoryNode elements and a url segment
      * It goes through the categoryNodes looking for the one whose id:alias matches the passed-in segment
      *   and returns the matching categoryNode, or null if not found
      */
-
     private function match($categoryNodes, $segment)
     {
         foreach ($categoryNodes as $categoryNode) {
@@ -150,7 +155,8 @@ class HelloworldRouter implements JComponentRouterInterface
                 return $query;
             }
 
-            if (!isset($query['Itemid'])) {  // we're currently on /component type of URL
+            if (!isset($query['Itemid']))  // we're currently on /component type of URL
+            {
                 // use the home page for the URL's language
                 $home = $sitemenu->getItems(array('language', 'home'), array($lang, true));
                 if ($home) {
@@ -174,9 +180,10 @@ class HelloworldRouter implements JComponentRouterInterface
             // if not, try to find an associated menuitem with the correct language
             $associations = JLanguageAssociations::getAssociations('com_menus', '#__menu', 'com_menus.item', $itemid, 'id', '', '');
             if (isset($associations[$lang])) {
-                $query['Itemid'] = (int) $associations[$lang]->id;
+                $query['Itemid'] = (int)$associations[$lang]->id;
                 return $query;
-            } else { // use the home page for that language (if it's set)
+            } else // use the home page for that language (if it's set)
+            {
                 $home = $sitemenu->getItems(array('language', 'home'), array($lang, true));
                 if ($home) {
                     $query['Itemid'] = $home[0]->id;
