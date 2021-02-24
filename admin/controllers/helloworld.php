@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_helloworld
@@ -17,8 +16,8 @@ defined('_JEXEC') or die('Restricted access');
  * @subpackage  com_helloworld
  * @since       0.0.9
  */
-class HelloWorldControllerHelloWorld extends JControllerForm {
-
+class HelloWorldControllerHelloWorld extends JControllerForm
+{
     /**
      * Implement to allowAdd or not
      *
@@ -28,7 +27,8 @@ class HelloWorldControllerHelloWorld extends JControllerForm {
      * @param array $data
      * @return bool
      */
-    protected function allowAdd($data = array()) {
+    protected function allowAdd($data = array())
+    {
         return parent::allowAdd($data);
     }
 
@@ -40,11 +40,18 @@ class HelloWorldControllerHelloWorld extends JControllerForm {
      * @param string $key
      * @return bool
      */
-    protected function allowEdit($data = array(), $key = 'id') {
+    protected function allowEdit($data = array(), $key = 'id')
+    {
         $id = isset($data[$key]) ? $data[$key] : 0;
         if (!empty($id)) {
             return JFactory::getUser()->authorise("core.edit", "com_helloworld.helloworld." . $id);
         }
     }
 
+    public function batch($model = null)
+    {
+        $model = $this->getModel('helloworld');
+        $this->setRedirect((string)JUri::getInstance());
+        return parent::batch($model);
+    }
 }

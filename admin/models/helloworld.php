@@ -6,6 +6,7 @@
  * @copyright   Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
@@ -18,11 +19,85 @@ use Joomla\Registry\Registry;
  */
 class HelloWorldModelHelloWorld extends JModelAdmin
 {
-
-    // JModelAdmin needs to know this for storing the associations 
+    // JModelAdmin needs to know this for storing the associations
     protected $associationsContext = 'com_helloworld.item';
+
     // Contenthistory needs to know this for restoring previous versions
     public $typeAlias = 'com_helloworld.helloworld';
+
+    // batch processes supported by helloworld (over and above the standard batch processes)
+    protected $helloworld_batch_commands = array(
+        'position' => 'batchPosition',
+    );
+
+    /**
+     * Method overriding batch in JModelAdmin so that we can include the additional batch processes
+     * which the helloworld component supports.
+     */
+    public function batch($commands, $pks, $contexts)
+    {
+        $this->batch_commands = array_merge($this->batch_commands, $this->helloworld_batch_commands);
+        return parent::batch($commands, $pks, $contexts);
+    }
+
+    /**
+     * Method implementing the batch setting of lat/long values
+     */
+    protected function batchPosition($value, $pks, $contexts)
+    {
+        $app = JFactory::getApplication();
+
+        if (isset($value['setposition']) && ($value['setposition'] === 'changePosition')) {
+            if (empty($this->batchSet)) {
+                // Set some needed variables.
+                $this->user = JFactory::getUser();
+                $this->table = $this->getTable();
+                $this->tableClassName = get_class($this->table);
+                $this->contentType = new JUcmType;
+                $this->type = $this->contentType->getTypeByTable($this->tableClassName);
+            }
+
+            foreach ($pks as $pk) {
+                if ($this->user->authorise('core.edit', $contexts[$pk])) {
+                    $this->table->reset();
+                    $this->table->load($pk);
+                    if (isset($value['latitude'])) {
+                        $latitude = floatval($value['latitude']);
+                        if ($latitude <= 90 && $latitude >= -90) {
+                            $this->table->latitude = $latitude;
+                        }
+                    }
+                    if (isset($value['longitude'])) {
+                        $longitude = floatval($value['longitude']);
+                        if ($longitude <= 180 && $longitude >= -180) {
+                            $this->table->longitude = $longitude;
+                        }
+                    }
+                    if (!$this->table->store()) {
+                        $this->setError($this->table->getError());
+
+                        return false;
+                    }
+                } else {
+                    $this->setError(JText::_('JLIB_APPLICATION_ERROR_BATCH_CANNOT_EDIT'));
+
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Method to override generateTitle() because the helloworld component uses 'greeting' as the title field
+     */
+    public function generateTitle($categoryId, $table)
+    {
+        // Alter the title & alias
+        $data = $this->generateNewTitle($categoryId, $table->alias, $table->greeting);
+        $table->greeting = $data['0'];
+        $table->alias = $data['1'];
+    }
 
     /**
      * Method to override getItem to allow us to convert the JSON-encoded image information
@@ -32,7 +107,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
     public function getItem($pk = null)
     {
         $item = parent::getItem($pk);
-        if ($item AND property_exists($item, 'image')) {
+        if ($item and property_exists($item, 'image')) {
             $registry = new Registry($item->image);
             $item->imageinfo = $registry->toArray();
         }
@@ -47,7 +122,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
             $item->associations = array();
 
             if ($item->id != null) {
-                $associations = JLanguageAssociations::getAssociations('com_helloworld', '#__helloworld', 'com_helloworld.item', (int) $item->id);
+                $associations = JLanguageAssociations::getAssociations('com_helloworld', '#__helloworld', 'com_helloworld.item', (int)$item->id);
 
                 foreach ($associations as $tag => $association) {
                     $item->associations[$tag] = $association->id;
@@ -60,9 +135,9 @@ class HelloWorldModelHelloWorld extends JModelAdmin
     /**
      * Method to get a table object, load it if necessary.
      *
-     * @param   string  $type    The table name. Optional.
-     * @param   string  $prefix  The class prefix. Optional.
-     * @param   array   $config  Configuration array for model. Optional.
+     * @param string $type The table name. Optional.
+     * @param string $prefix The class prefix. Optional.
+     * @param array $config Configuration array for model. Optional.
      *
      * @return  JTable  A JTable object
      *
@@ -76,8 +151,8 @@ class HelloWorldModelHelloWorld extends JModelAdmin
     /**
      * Method to get the record form.
      *
-     * @param   array    $data      Data for the form.
-     * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
+     * @param array $data Data for the form.
+     * @param boolean $loadData True if the form is to load its own data (default case), false if not.
      *
      * @return  mixed    A JForm object on success, false on failure
      *
@@ -138,7 +213,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
     /**
      * Method to get the script to be included on the form
      *
-     * @return string	Script files
+     * @return string    Script files
      */
     public function getScript()
     {
@@ -170,7 +245,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
     /**
      * Method to override the JModelAdmin save() function to handle Save as Copy correctly
      *
-     * @param   The helloworld record data submitted from the form.
+     * @param The helloworld record data submitted from the form.
      *
      * @return  parent::save() return value
      */
@@ -182,7 +257,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 
         // Validate the category id
         // validateCategoryId() returns 0 if the catid can't be found
-        if ((int) $data['catid'] > 0) {
+        if ((int)$data['catid'] > 0) {
             $data['catid'] = CategoriesHelper::validateCategoryId($data['catid'], 'com_helloworld');
         }
 
@@ -226,7 +301,6 @@ class HelloWorldModelHelloWorld extends JModelAdmin
      */
     protected function prepareTable($table)
     {
-        
     }
 
     /**

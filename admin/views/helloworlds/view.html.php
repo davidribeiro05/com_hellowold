@@ -86,6 +86,8 @@ class HelloWorldViewHelloWorlds extends JViewLegacy
     {
         $title = JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLDS');
 
+        $bar = JToolbar::getInstance('toolbar');
+
         if ($this->pagination->total) {
             $title .= "<span style='font-size: 0.5em; vertical-align: middle;'>(" . $this->pagination->total . ")</span>";
         }
@@ -102,6 +104,14 @@ class HelloWorldViewHelloWorlds extends JViewLegacy
         }
         if ($this->canDo->get('core.edit') || JFactory::getUser()->authorise('core.manage', 'com_checkin')) {
             JToolBarHelper::checkin('helloworlds.checkin');
+        }
+        // Add a batch button
+        if ($this->canDo->get('core.create') && $this->canDo->get('core.edit')
+            && $this->canDo->get('core.edit.state')) {
+            // we use a standard Joomla layout to get the html for the batch button
+            $layout = new JLayoutFile('joomla.toolbar.batch');
+            $batchButtonHtml = $layout->render(array('title' => JText::_('JTOOLBAR_BATCH')));
+            $bar->appendButton('Custom', $batchButtonHtml, 'batch');
         }
         if ($this->canDo->get('core.admin')) {
             JToolBarHelper::divider();
