@@ -14,7 +14,7 @@ class HelloworldModelCategory extends JModelList
                 'id',
                 'greeting',
                 'alias',
-                'ordering',
+                'lft',
             );
         }
 
@@ -46,7 +46,7 @@ class HelloworldModelCategory extends JModelList
             $query->where('language IN ("*","' . $lang . '")');
         }
 
-        $orderCol = $this->state->get('list.ordering', 'ordering');
+        $orderCol = $this->state->get('list.ordering', 'lft');
         $orderDirn = $this->state->get('list.direction', 'asc');
 
         $query->order($db->escape($orderCol) . ' ' . $db->escape($orderDirn));

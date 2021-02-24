@@ -45,11 +45,11 @@
                 label="COM_HELLOWORLD_LIST_FULL_ORDERING"
                 description="COM_HELLOWORLD_LIST_FULL_ORDERING_DESC"
                 onchange="this.form.submit();"
-                default="greeting ASC"
+                default="lft ASC"
         >
             <option value="">JGLOBAL_SORT_BY</option>
-            <option value="ordering ASC">COM_HELLOWORLD_ORDERING_ASC</option>
-            <option value="ordering DESC">COM_HELLOWORLD_ORDERING_DESC</option>
+            <option value="lft ASC">COM_HELLOWORLD_ORDERING_ASC</option>
+            <option value="lft DESC">COM_HELLOWORLD_ORDERING_DESC</option>
             <option value="greeting ASC">COM_HELLOWORLD_GREETING_ASC</option>
             <option value="greeting DESC">COM_HELLOWORLD_GREETING_DESC</option>
             <option value="id ASC">JGRID_HEADING_ID_ASC</option>

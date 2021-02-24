@@ -5,11 +5,11 @@
                 name="fullordering"
                 type="list"
                 onchange="this.form.submit();"
-                default="ordering ASC"
+                default="lft ASC"
         >
             <option value="">COM_HELLOWORLD_SORT_BY</option>
-            <option value="ordering ASC">COM_HELLOWORLD_ORDERING_ASC</option>
-            <option value="ordering DESC">COM_HELLOWORLD_ORDERING_DESC</option>
+            <option value="lft ASC">COM_HELLOWORLD_ORDERING_ASC</option>
+            <option value="lft DESC">COM_HELLOWORLD_ORDERING_DESC</option>
             <option value="greeting ASC">COM_HELLOWORLD_GREETING_ASC</option>
             <option value="greeting DESC">COM_HELLOWORLD_GREETING_DESC</option>
             <option value="id ASC">COM_HELLOWORLD_ID_ASC</option>

@@ -197,7 +197,11 @@ class HelloWorldModelHelloWorld extends JModelAdmin
             $data['published'] = 0;
         }
 
-        return parent::save($data);
+        $result = parent::save($data);
+        if ($result) {
+            $this->getTable()->rebuild(1);
+        }
+        return $result;
     }
 
     /**
@@ -215,17 +219,22 @@ class HelloWorldModelHelloWorld extends JModelAdmin
      */
     protected function prepareTable($table)
     {
-        // Set ordering to the last item if not set
-        if (empty($table->ordering)) {
-            $db = $this->getDbo();
-            $query = $db->getQuery(true)
-                ->select('MAX(ordering)')
-                ->from('#__helloworld');
+    }
 
-            $db->setQuery($query);
-            $max = $db->loadResult();
+    /**
+     * Save the record reordering after a record is dragged to a new position in the helloworlds view
+     */
+    public function saveorder($idArray = null, $lft_array = null)
+    {
+        // Get an instance of the table object.
+        $table = $this->getTable();
 
-            $table->ordering = $max + 1;
+        if (!$table->saveorder($idArray, $lft_array)) {
+            $this->setError($table->getError());
+
+            return false;
         }
+
+        return true;
     }
 }

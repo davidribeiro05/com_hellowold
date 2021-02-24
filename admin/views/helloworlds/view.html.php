@@ -62,6 +62,12 @@ class HelloWorldViewHelloWorlds extends JViewLegacy
             }
         }
 
+        // Prepare a mapping from parent id to the ids of its children
+        $this->ordering = array();
+        foreach ($this->items as $item) {
+            $this->ordering[$item->parent_id][] = $item->id;
+        }
+
         // Display the template
         parent::display($tpl);
 

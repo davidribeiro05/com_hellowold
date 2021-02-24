@@ -10,7 +10,11 @@ CREATE TABLE `#__helloworld` (
 	`greeting` VARCHAR(25) NOT NULL,
 	`alias`  VARCHAR(40)  NOT NULL DEFAULT '',
 	`language`  CHAR(7)  NOT NULL DEFAULT '*',
-	`ordering`	int(11)    NOT NULL DEFAULT '0',
+	`parent_id`	int(10)    NOT NULL DEFAULT '1',
+	`level`	int(10)    NOT NULL DEFAULT '0',
+	`path`	VARCHAR(400)    NOT NULL DEFAULT '',
+	`lft`	int(11)    NOT NULL DEFAULT '0',
+	`rgt`	int(11)    NOT NULL DEFAULT '0',
 	`published` tinyint(4) NOT NULL DEFAULT '1',
 	`catid`	    int(11)    NOT NULL DEFAULT '0',
 	`params`   VARCHAR(1024) NOT NULL DEFAULT '',
@@ -25,6 +29,9 @@ CREATE TABLE `#__helloworld` (
 
 CREATE UNIQUE INDEX `aliasindex` ON `#__helloworld` (`alias`, `catid`);
 
-INSERT INTO `#__helloworld` (`greeting`,`alias`,`language`,`ordering`) VALUES
-('Hello World!','hello-world','en-GB',1),
-('Goodbye World!','goodbye-world','en-GB',2);
+/*We added the published column to the INTO statement in order to set the published column, in the helloworld root record, to 1 otherwise you won't be able to publish items.*/
+
+INSERT INTO `#__helloworld` (`greeting`,`alias`,`language`, `parent_id`, `level`, `path`, `lft`, `rgt`, `published`) VALUES
+('helloworld root','helloworld-root-alias','en-GB', 0, 0, '', 0, 5, 1),
+('Hello World!','hello-world','en-GB', 1, 1, 'hello-world', 1, 2, 0),
+('Goodbye World!','goodbye-world','en-GB', 1, 1, 'goodbye-world', 3, 4, 0);

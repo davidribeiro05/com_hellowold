@@ -6,6 +6,7 @@
  * @copyright   Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
@@ -18,7 +19,6 @@ JLoader::register('HelloworldHelperRoute', JPATH_ROOT . '/components/com_hellowo
  */
 class HelloWorldModelHelloWorld extends JModelItem
 {
-
     /**
      * @var object item
      */
@@ -33,8 +33,8 @@ class HelloWorldModelHelloWorld extends JModelItem
      *
      * Note. Calling getState in this method will result in recursion.
      *
-     * @return	void
-     * @since	2.5
+     * @return    void
+     * @since    2.5
      */
     protected function populateState()
     {
@@ -51,9 +51,9 @@ class HelloWorldModelHelloWorld extends JModelItem
     /**
      * Method to get a table object, load it if necessary.
      *
-     * @param   string  $type    The table name. Optional.
-     * @param   string  $prefix  The class prefix. Optional.
-     * @param   array   $config  Configuration array for model. Optional.
+     * @param string $type The table name. Optional.
+     * @param string $prefix The class prefix. Optional.
+     * @param array $config Configuration array for model. Optional.
      *
      * @return  JTable  A JTable object
      *
@@ -68,23 +68,24 @@ class HelloWorldModelHelloWorld extends JModelItem
      * Get the message
      * @return object The message to be displayed to the user
      */
-    public function getItem()
+    public function getItem($id = null)
     {
-        if (!isset($this->item)) {
-            $id = $this->getState('message.id');
+        if (!isset($this->item) || !is_null($id)) {
+            $id = is_null($id) ? $this->getState('message.id') : $id;
             $db = JFactory::getDbo();
             $query = $db->getQuery(true);
-            $query->select('h.greeting, h.params, h.image as image, c.title as category, h.latitude as latitude, h.longitude as longitude')
+            $query->select('h.greeting, h.params, h.image as image, c.title as category, h.latitude as latitude, h.longitude as longitude,
+						h.id as id, h.alias as alias, h.catid as catid, h.parent_id as parent_id, h.level as level')
                 ->from('#__helloworld as h')
                 ->leftJoin('#__categories as c ON h.catid=c.id')
-                ->where('h.id=' . (int) $id);
+                ->where('h.id=' . (int)$id);
 
             if (JLanguageMultilang::isEnabled()) {
                 $lang = JFactory::getLanguage()->getTag();
                 $query->where('h.language IN ("*","' . $lang . '")');
             }
 
-            $db->setQuery((string) $query);
+            $db->setQuery((string)$query);
 
             if ($this->item = $db->loadObject()) {
                 // Load the JSON string
@@ -158,9 +159,16 @@ class HelloWorldModelHelloWorld extends JModelItem
 
         for ($i = 0; $i < count($results); $i++) {
             $results[$i]->url = JRoute::_('index.php?option=com_helloworld&view=helloworld&id=' . $results[$i]->id .
-                    ":" . $results[$i]->alias . '&catid=' . $results[$i]->catid . $query_lang);
+                ":" . $results[$i]->alias . '&catid=' . $results[$i]->catid . $query_lang);
         }
 
         return $results;
+    }
+
+    public function getChildren($id)
+    {
+        $table = $this->getTable();
+        $children = $table->getTree($id);
+        return $children;
     }
 }

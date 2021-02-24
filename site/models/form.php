@@ -101,9 +101,5 @@ class HelloWorldModelForm extends JModelAdmin
      */
     protected function prepareTable($table)
     {
-        // Reorder the records within the category so the new record is first
-        if (empty($table->id)) {
-            $table->reorder('catid = ' . (int)$table->catid);
-        }
     }
 }

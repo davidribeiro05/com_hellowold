@@ -33,7 +33,7 @@ class HelloWorldModelHelloWorlds extends JModelList
                 'author',
                 'created',
                 'language',
-                'ordering',
+                'lft',
                 'category_id',
                 'association',
                 'published'
@@ -43,7 +43,7 @@ class HelloWorldModelHelloWorlds extends JModelList
         parent::__construct($config);
     }
 
-    protected function populateState($ordering = null, $direction = null)
+    protected function populateState($ordering = 'lft', $direction = 'asc')
     {
         $app = JFactory::getApplication();
 
@@ -79,8 +79,9 @@ class HelloWorldModelHelloWorlds extends JModelList
 
         // Create the base select statement.
         $query->select('a.id as id, a.greeting as greeting, a.published as published, a.created as created, 
-			  a.checked_out as checked_out, a.checked_out_time as checked_out_time, a.ordering as ordering, a.catid as catid,
-			  a.image as imageInfo, a.latitude as latitude, a.longitude as longitude, a.alias as alias, a.language as language')
+                          a.checked_out as checked_out, a.checked_out_time as checked_out_time, a.catid as catid,
+                          a.lft as lft, a.rgt as rgt, a.parent_id as parent_id, a.level as level, a.path as path,
+                          a.image as imageInfo, a.latitude as latitude, a.longitude as longitude, a.alias as alias, a.language as language')
             ->from($db->quoteName('#__helloworld', 'a'));
 
         // Join over the categories.
@@ -138,8 +139,11 @@ class HelloWorldModelHelloWorlds extends JModelList
             $query->where("a.catid = " . $db->quote($db->escape($catid)));
         }
 
+        // exclude root helloworld record
+        $query->where('a.id > 1');
+
         // Add the list ordering clause.
-        $orderCol = $this->state->get('list.ordering', 'greeting');
+        $orderCol = $this->state->get('list.ordering', 'lft');
         $orderDirn = $this->state->get('list.direction', 'asc');
 
         $query->order($db->escape($orderCol) . ' ' . $db->escape($orderDirn));
