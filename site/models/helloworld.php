@@ -74,7 +74,8 @@ class HelloWorldModelHelloWorld extends JModelItem
             $id = is_null($id) ? $this->getState('message.id') : $id;
             $db = JFactory::getDbo();
             $query = $db->getQuery(true);
-            $query->select('h.greeting, h.params, h.image as image, c.title as category, h.latitude as latitude, h.longitude as longitude,
+            $query->select('h.greeting, h.params, h.image as image, c.title as category, c.access as catAccess, 
+						h.latitude as latitude, h.longitude as longitude, h.access as access,
 						h.id as id, h.alias as alias, h.catid as catid, h.parent_id as parent_id, h.level as level, h.description as description')
                 ->from('#__helloworld as h')
                 ->leftJoin('#__categories as c ON h.catid=c.id')
@@ -102,6 +103,19 @@ class HelloWorldModelHelloWorld extends JModelItem
                 $image = new JRegistry;
                 $image->loadString($this->item->image, 'JSON');
                 $this->item->imageDetails = $image;
+
+                // Check if the user can access this record (and category)
+                $user = JFactory::getUser();
+                $userAccessLevels = $user->getAuthorisedViewLevels();
+                if ($user->authorise('core.admin')) { // ie superuser
+                    $this->item->canAccess = true;
+                } else {
+                    if ($this->item->catid == 0) {
+                        $this->item->canAccess = in_array($this->item->access, $userAccessLevels);
+                    } else {
+                        $this->item->canAccess = in_array($this->item->access, $userAccessLevels) && in_array($this->item->catAccess, $userAccessLevels);
+                    }
+                }
             } else {
                 throw new Exception('Helloworld id not found', 404);
             }
@@ -131,7 +145,7 @@ class HelloWorldModelHelloWorld extends JModelItem
         try {
             $db = JFactory::getDbo();
             $query = $db->getQuery(true);
-            $query->select('h.id, h.alias, h.catid, h.greeting, h.latitude, h.longitude')
+            $query->select('h.id, h.alias, h.catid, h.greeting, h.latitude, h.longitude, h.access')
                 ->from('#__helloworld as h')
                 ->where('h.latitude > ' . $mapbounds['minlat'] .
                     ' AND h.latitude < ' . $mapbounds['maxlat'] .
@@ -141,6 +155,15 @@ class HelloWorldModelHelloWorld extends JModelItem
             if (JLanguageMultilang::isEnabled()) {
                 $lang = JFactory::getLanguage()->getTag();
                 $query->where('h.language IN ("*","' . $lang . '")');
+            }
+
+            $user = JFactory::getUser();
+            $loggedIn = $user->get('guest') != 1;
+            if ($loggedIn && !$user->authorise('core.admin')) {
+                $userAccessLevels = $user->getAuthorisedViewLevels();
+                $query->where('h.access IN (' . implode(",", $userAccessLevels) . ')');
+                $query->join('LEFT', $db->quoteName('#__categories', 'c') . ' ON c.id = h.catid');
+                $query->where('(c.access IN (' . implode(",", $userAccessLevels) . ') OR h.catid = 0)');
             }
 
             $db->setQuery($query);

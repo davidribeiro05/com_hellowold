@@ -28,12 +28,29 @@ class HelloWorldViewHelloWorld extends JViewLegacy
     {
         // Assign data to the view
         $this->item = $this->get('Item');
+        $user = JFactory::getUser();
+        $app = JFactory::getApplication();
 
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {
             JLog::add(implode('<br />', $errors), JLog::WARNING, 'jerror');
 
             return false;
+        }
+
+        // Take action based on whether the user has access to see the record or not
+        $loggedIn = $user->get('guest') != 1;
+        if (!$this->item->canAccess) {
+            if ($loggedIn) {
+                $app->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'), 'error');
+                $app->setHeader('status', 403, true);
+                return;
+            } else {
+                $return = base64_encode(JUri::getInstance());
+                $login_url_with_return = JRoute::_('index.php?option=com_users&return=' . $return, false);
+                $app->enqueueMessage(JText::_('COM_HELLOWORLD_MUST_LOGIN'), 'notice');
+                $app->redirect($login_url_with_return, 403);
+            }
         }
 
         $this->addMap();

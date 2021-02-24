@@ -16,10 +16,11 @@ defined('_JEXEC') or die('Restricted access');
  */
 class HelloWorldModelHelloWorlds extends JModelList
 {
+
     /**
      * Constructor.
      *
-     * @param array $config An optional associative array of configuration settings.
+     * @param   array  $config  An optional associative array of configuration settings.
      *
      * @see     JController
      * @since   1.6
@@ -35,6 +36,7 @@ class HelloWorldModelHelloWorlds extends JModelList
                 'language',
                 'lft',
                 'category_id',
+                'access',
                 'association',
                 'published'
             );
@@ -76,9 +78,10 @@ class HelloWorldModelHelloWorlds extends JModelList
         // Initialize variables.
         $db = JFactory::getDbo();
         $query = $db->getQuery(true);
+        $user = JFactory::getUser();
 
         // Create the base select statement.
-        $query->select('a.id as id, a.greeting as greeting, a.published as published, a.created as created, 
+        $query->select('a.id as id, a.greeting as greeting, a.published as published, a.created as created, a.access as access,
                           a.checked_out as checked_out, a.checked_out_time as checked_out_time, a.catid as catid,
                           a.lft as lft, a.rgt as rgt, a.parent_id as parent_id, a.level as level, a.path as path,
                           a.image as imageInfo, a.latitude as latitude, a.longitude as longitude, a.alias as alias, a.language as language')
@@ -97,7 +100,7 @@ class HelloWorldModelHelloWorlds extends JModelList
             ->join('LEFT', $db->quoteName('#__users', 'u2') . ' ON u2.id = a.checked_out');
 
         // Join with languages table to get the language title and image to display
-        // Put these into fields called language_title and language_image so that
+        // Put these into fields called language_title and language_image so that 
         // we can use the little com_content layout to display the map symbol
         $query->select($db->quoteName('l.title', 'language_title') . "," . $db->quoteName('l.image', 'language_image'))
             ->join('LEFT', $db->quoteName('#__languages', 'l') . ' ON l.lang_code = a.language');
@@ -109,6 +112,10 @@ class HelloWorldModelHelloWorlds extends JModelList
                 ->join('LEFT', '#__associations AS asso2 ON asso2.key = asso.key')
                 ->group('a.id');
         }
+
+        // Join over the access levels, to get the name of the access level
+        $query->select('v.title AS access_level')
+            ->join('LEFT', '#__viewlevels AS v ON v.id = a.access');
 
         // Filter: like / search
         $search = $this->getState('filter.search');
@@ -122,7 +129,7 @@ class HelloWorldModelHelloWorlds extends JModelList
         $published = $this->getState('filter.published');
 
         if (is_numeric($published)) {
-            $query->where('a.published = ' . (int)$published);
+            $query->where('a.published = ' . (int) $published);
         } elseif ($published === '') {
             $query->where('(a.published IN (0, 1))');
         }
@@ -137,6 +144,13 @@ class HelloWorldModelHelloWorlds extends JModelList
         $catid = $this->getState('filter.category_id');
         if ($catid) {
             $query->where("a.catid = " . $db->quote($db->escape($catid)));
+        }
+
+        // Display only records to which the user has access
+        if (!$user->authorise('core.admin')) {  // ie if not SuperUser
+            $userAccessLevels = implode(',', $user->getAuthorisedViewLevels());
+            $query->where('a.access IN (' . $userAccessLevels . ')');
+            $query->where('c.access IN (' . $userAccessLevels . ')');
         }
 
         // exclude root helloworld record

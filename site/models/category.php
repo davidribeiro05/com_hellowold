@@ -2,11 +2,11 @@
 /**
  * Model for displaying the helloworld messages in a given category
  */
-
 defined('_JEXEC') or die;
 
 class HelloworldModelCategory extends JModelList
 {
+
     public function __construct($config = array())
     {
         if (empty($config['filter_fields'])) {
@@ -37,7 +37,7 @@ class HelloworldModelCategory extends JModelList
         $query = $db->getQuery(true);
 
         $catid = $this->getState('category.id');
-        $query->select('id, greeting, alias, catid')
+        $query->select('id, greeting, alias, catid, access')
             ->from($db->quoteName('#__helloworld'))
             ->where('catid = ' . $catid);
 
@@ -57,7 +57,7 @@ class HelloworldModelCategory extends JModelList
     public function getCategoryName()
     {
         $catid = $this->getState('category.id');
-        $categories = JCategories::getInstance('Helloworld', array());
+        $categories = JCategories::getInstance('Helloworld', array('access' => false));
         $categoryNode = $categories->get($catid);
         return $categoryNode->title;
     }
@@ -65,7 +65,7 @@ class HelloworldModelCategory extends JModelList
     public function getSubcategories()
     {
         $catid = $this->getState('category.id');
-        $categories = JCategories::getInstance('Helloworld', array());
+        $categories = JCategories::getInstance('Helloworld', array('access' => false));
         $categoryNode = $categories->get($catid);
         $subcats = $categoryNode->getChildren();
 
@@ -80,5 +80,49 @@ class HelloworldModelCategory extends JModelList
             $subcat->url = JRoute::_("index.php?view=category&id=" . $subcat->id . $query_lang);
         }
         return $subcats;
+    }
+
+    public function getCategoryAccess()
+    {
+        $catid = $this->getState('category.id');
+        $categories = JCategories::getInstance('Helloworld', array('access' => false));
+        $categoryNode = $categories->get($catid);
+        return $categoryNode->access;
+    }
+
+    public function getItems()
+    {
+        $items = parent::getItems();
+        $user = JFactory::getUser();
+        $loggedIn = $user->get('guest') != 1;
+
+        if ($user->authorise('core.admin')) { // ie superuser
+            return $items;
+        } else {
+            $userAccessLevels = $user->getAuthorisedViewLevels();
+            $catAccess = $this->getCategoryAccess();
+
+            if (!in_array($catAccess, $userAccessLevels)) {  // the user hasn't access to the category
+                if ($loggedIn) {
+                    return array();
+                } else {
+                    foreach ($items as $item) {
+                        $item->canAccess = false;
+                    }
+                    return $items;
+                }
+            }
+
+            foreach ($items as $item) {
+                if (!in_array($item->access, $userAccessLevels)) {
+                    if ($loggedIn) {
+                        unset($item);
+                    } else {
+                        $item->canAccess = false;
+                    }
+                }
+            }
+        }
+        return $items;
     }
 }

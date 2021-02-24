@@ -93,6 +93,13 @@
             multiple="true"
         >
         </field>
+        <field  
+            name="access" 
+            type="accesslevel" 
+            label="JFIELD_ACCESS_LABEL"
+            description="JFIELD_ACCESS_DESC"
+        >
+        </field>
         <field
             name="parent_id"
             type="helloworldparent"
