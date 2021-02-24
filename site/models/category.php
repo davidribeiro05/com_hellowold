@@ -2,11 +2,11 @@
 /**
  * Model for displaying the helloworld messages in a given category
  */
+
 defined('_JEXEC') or die;
 
 class HelloworldModelCategory extends JModelList
 {
-
     public function __construct($config = array())
     {
         if (empty($config['filter_fields'])) {
@@ -37,7 +37,7 @@ class HelloworldModelCategory extends JModelList
         $query = $db->getQuery(true);
 
         $catid = $this->getState('category.id');
-        $query->select('id, greeting, alias, catid, access')
+        $query->select('id, greeting, alias, catid, access, description, image')
             ->from($db->quoteName('#__helloworld'))
             ->where('catid = ' . $catid);
 
@@ -96,7 +96,8 @@ class HelloworldModelCategory extends JModelList
         $user = JFactory::getUser();
         $loggedIn = $user->get('guest') != 1;
 
-        if ($user->authorise('core.admin')) { // ie superuser
+        if ($user->authorise('core.admin')) // ie superuser
+        {
             return $items;
         } else {
             $userAccessLevels = $user->getAuthorisedViewLevels();
@@ -124,5 +125,12 @@ class HelloworldModelCategory extends JModelList
             }
         }
         return $items;
+    }
+
+    public function getCategory()
+    {
+        $categories = JCategories::getInstance('Helloworld', array());
+        $category = $categories->get($this->getState('category.id', 'root'));
+        return $category;
     }
 }
