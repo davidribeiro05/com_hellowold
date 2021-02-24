@@ -45,7 +45,9 @@ class HelloWorldModelHelloWorld extends JModelAdmin
      */
     protected function batchPosition($value, $pks, $contexts)
     {
+
         $app = JFactory::getApplication();
+        $app->enqueueMessage("In batchPosition");
 
         if (isset($value['setposition']) && ($value['setposition'] === 'changePosition')) {
             if (empty($this->batchSet)) {
@@ -318,5 +320,10 @@ class HelloWorldModelHelloWorld extends JModelAdmin
         }
 
         return true;
+    }
+
+    protected function cleanCache($group = null, $client_id = 0)
+    {
+        parent::cleanCache('com_helloworld');
     }
 }

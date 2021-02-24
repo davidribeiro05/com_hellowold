@@ -102,4 +102,9 @@ class HelloWorldModelForm extends JModelAdmin
     protected function prepareTable($table)
     {
     }
+
+    protected function cleanCache($group = null, $client_id = 0)
+    {
+        parent::cleanCache('com_helloworld');
+    }
 }

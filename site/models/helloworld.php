@@ -6,6 +6,7 @@
  * @copyright   Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
@@ -18,7 +19,6 @@ JLoader::register('HelloworldHelperRoute', JPATH_ROOT . '/components/com_hellowo
  */
 class HelloWorldModelHelloWorld extends JModelItem
 {
-
     /**
      * @var object item
      */
@@ -33,8 +33,8 @@ class HelloWorldModelHelloWorld extends JModelItem
      *
      * Note. Calling getState in this method will result in recursion.
      *
-     * @return	void
-     * @since	2.5
+     * @return    void
+     * @since    2.5
      */
     protected function populateState()
     {
@@ -51,9 +51,9 @@ class HelloWorldModelHelloWorld extends JModelItem
     /**
      * Method to get a table object, load it if necessary.
      *
-     * @param   string  $type    The table name. Optional.
-     * @param   string  $prefix  The class prefix. Optional.
-     * @param   array   $config  Configuration array for model. Optional.
+     * @param string $type The table name. Optional.
+     * @param string $prefix The class prefix. Optional.
+     * @param array $config Configuration array for model. Optional.
      *
      * @return  JTable  A JTable object
      *
@@ -79,14 +79,14 @@ class HelloWorldModelHelloWorld extends JModelItem
 						h.id as id, h.alias as alias, h.catid as catid, h.parent_id as parent_id, h.level as level, h.description as description')
                 ->from('#__helloworld as h')
                 ->leftJoin('#__categories as c ON h.catid=c.id')
-                ->where('h.id=' . (int) $id);
+                ->where('h.id=' . (int)$id);
 
             if (JLanguageMultilang::isEnabled()) {
                 $lang = JFactory::getLanguage()->getTag();
                 $query->where('h.language IN ("*","' . $lang . '")');
             }
 
-            $db->setQuery((string) $query);
+            $db->setQuery((string)$query);
 
             if ($this->item = $db->loadObject()) {
                 // Load the JSON string
@@ -107,7 +107,8 @@ class HelloWorldModelHelloWorld extends JModelItem
                 // Check if the user can access this record (and category)
                 $user = JFactory::getUser();
                 $userAccessLevels = $user->getAuthorisedViewLevels();
-                if ($user->authorise('core.admin')) { // ie superuser
+                if ($user->authorise('core.admin')) // ie superuser
+                {
                     $this->item->canAccess = true;
                 } else {
                     if ($this->item->catid == 0) {
@@ -141,6 +142,25 @@ class HelloWorldModelHelloWorld extends JModelItem
     }
 
     public function getMapSearchResults($mapbounds)
+    {
+        if (JFactory::getConfig()->get('caching') >= 1) {
+            // Build a cache ID based on the conditions for the SQL where clause
+            $groups = implode(',', JFactory::getUser()->getAuthorisedViewLevels());
+            $cacheId = $groups . '.' . $mapbounds['minlat'] . '.' . $mapbounds['maxlat'] . '.' .
+                $mapbounds['minlng'] . '.' . $mapbounds['maxlng'];
+            if (JLanguageMultilang::isEnabled()) {
+                $lang = JFactory::getLanguage()->getTag();
+                $cacheId .= $lang;
+            }
+            $cache = JFactory::getCache('com_helloworld', 'callback');
+            $results = $cache->get(array($this, '_getMapSearchResults'), array($mapbounds), md5($cacheId), false);
+            return $results;
+        } else {
+            return $this->_getMapSearchResults($mapbounds);
+        }
+    }
+
+    public function _getMapSearchResults($mapbounds)
     {
         try {
             $db = JFactory::getDbo();
@@ -182,7 +202,7 @@ class HelloWorldModelHelloWorld extends JModelItem
 
         for ($i = 0; $i < count($results); $i++) {
             $results[$i]->url = JRoute::_('index.php?option=com_helloworld&view=helloworld&id=' . $results[$i]->id .
-                    ":" . $results[$i]->alias . '&catid=' . $results[$i]->catid . $query_lang);
+                ":" . $results[$i]->alias . '&catid=' . $results[$i]->catid . $query_lang);
         }
 
         return $results;
