@@ -3,9 +3,10 @@
  * @package     Joomla.Administrator
  * @subpackage  com_helloworld
  *
- * @copyright   Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
@@ -16,11 +17,10 @@ defined('_JEXEC') or die('Restricted access');
  */
 class HelloWorldViewHelloWorld extends JViewLegacy
 {
-
     /**
      * Display the Hello World view
      *
-     * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
+     * @param string $tpl The name of the template file to parse; automatically searches through the template paths.
      *
      * @return  void
      */
@@ -30,6 +30,23 @@ class HelloWorldViewHelloWorld extends JViewLegacy
         $this->item = $this->get('Item');
         $user = JFactory::getUser();
         $app = JFactory::getApplication();
+
+        // for custom fields
+        $dispatcher = JEventDispatcher::getInstance();
+        JPluginHelper::importPlugin('content');
+        $item = $this->item;
+        $item->text = null;
+
+        $dispatcher->trigger('onContentPrepare', array('com_helloworld.helloworld', &$item, &$item->params, null));
+
+        $results = $dispatcher->trigger('onContentAfterTitle', array('com_helloworld.helloworld', &$item, &$item->params, null));
+        $item->afterDisplayTitle = trim(implode("\n", $results));
+
+        $results = $dispatcher->trigger('onContentBeforeDisplay', array('com_helloworld.helloworld', &$item, &$item->params, null));
+        $item->beforeDisplayContent = trim(implode("\n", $results));
+
+        $results = $dispatcher->trigger('onContentAfterDisplay', array('com_helloworld.helloworld', &$item, &$item->params, null));
+        $item->afterDisplayContent = trim(implode("\n", $results));
 
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {

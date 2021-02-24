@@ -3,15 +3,18 @@
  * @package     Joomla.Administrator
  * @subpackage  com_helloworld
  *
- * @copyright   Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  *
  * This layout file is for displaying the front end form for capturing a new helloworld message
  *
  */
+
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.formvalidator');
+$fieldsets = $this->form->getFieldsets('com_fields');
+
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=form&layout=edit'); ?>"
       method="post" name="adminForm" id="adminForm" class="form-validate" enctype="multipart/form-data">
@@ -21,12 +24,16 @@ JHtml::_('behavior.formvalidator');
             <legend><?php echo JText::_('COM_HELLOWORLD_LEGEND_DETAILS') ?></legend>
             <div class="row-fluid">
                 <div class="span6">
-<?php echo $this->form->renderFieldset('details'); ?>
+                    <?php echo $this->form->renderFieldset('details'); ?>
                 </div>
             </div>
         </fieldset>
     </div>
-
+    <?php
+    foreach ($fieldsets as $fieldset) {
+        echo $this->form->renderFieldset($fieldset->name);
+    }
+    ?>
     <div class="btn-toolbar">
         <div class="btn-group">
             <button type="button" class="btn btn-primary" onclick="Joomla.submitbutton('helloworld.save')">
@@ -40,6 +47,7 @@ JHtml::_('behavior.formvalidator');
         </div>
     </div>
 
-    <input type="hidden" name="task" />
-<?php echo JHtml::_('form.token'); ?>
+    <input type="hidden" name="task"/>
+    <input type="hidden" name="modelname" value="form"/>
+    <?php echo JHtml::_('form.token'); ?>
 </form>

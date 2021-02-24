@@ -1,10 +1,9 @@
 <?php
-
 /**
  * @package     Joomla.Site
  * @subpackage  com_helloworld
  *
- * @copyright   Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 // No direct access to this file
@@ -16,27 +15,38 @@ defined('_JEXEC') or die('Restricted access');
  * @package     Joomla.Site
  * @subpackage  com_helloworld
  *
- * Used to handle the http POST from the front-end form which allows 
+ * Used to handle the http POST from the front-end form which allows
  * users to enter a new helloworld message
  *
  */
-class HelloWorldControllerHelloWorld extends JControllerForm {
+class HelloWorldControllerHelloWorld extends JControllerForm
+{
+    protected $view_item;  // default view within JControllerForm for reload function
 
-    public function cancel($key = null) {
+    public function __construct($config = array())
+    {
+        $input = JFactory::getApplication()->input;
+        $this->view_item = $input->get("view", "helloworld", "string");
+        parent::__construct($config);
+    }
+
+    public function cancel($key = null)
+    {
         parent::cancel($key);
 
         // set up the redirect back to the same form
         $this->setRedirect(
-                (string) JUri::getInstance(), JText::_(COM_HELLOWORLD_ADD_CANCELLED)
+            (string)JUri::getInstance(),
+            JText::_(COM_HELLOWORLD_ADD_CANCELLED)
         );
     }
 
     /*
-     * Function handing the save for adding a new helloworld record
-     * Based on the save() function in the JControllerForm class
-     */
-
-    public function save($key = null, $urlVar = null) {
+    * Function handing the save for adding a new helloworld record
+    * Based on the save() function in the JControllerForm class
+    */
+    public function save($key = null, $urlVar = null)
+    {
         // Check for request forgeries.
         JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
@@ -44,9 +54,9 @@ class HelloWorldControllerHelloWorld extends JControllerForm {
         $input = $app->input;
         $model = $this->getModel('form');
 
-        // Get the current URI to set in redirects. As we're handling a POST, 
+        // Get the current URI to set in redirects. As we're handling a POST,
         // this URI comes from the <form action="..."> attribute in the layout file above
-        $currentUri = (string) JUri::getInstance();
+        $currentUri = (string)JUri::getInstance();
 
         // Check that this user is allowed to add a new record
         if (!JFactory::getUser()->authorise("core.create", "com_helloworld")) {
@@ -62,7 +72,7 @@ class HelloWorldControllerHelloWorld extends JControllerForm {
         // set up context for saving form data
         $context = "$this->option.edit.$this->context";
 
-        // save the form data and set up the redirect back to the same form, 
+        // save the form data and set up the redirect back to the same form,
         // to avoid repeating them under every error condition
         $app->setUserState($context . '.data', $data);
         $this->setRedirect($currentUri);
@@ -78,7 +88,7 @@ class HelloWorldControllerHelloWorld extends JControllerForm {
 
         // ... and then we validate the data against it
         // The validate function called below results in the running of the validate="..." routines
-        // specified against the fields in the form xml file, and also filters the data 
+        // specified against the fields in the form xml file, and also filters the data
         // according to the filter="..." specified in the same place (removing html tags by default in strings)
         $validData = $model->validate($form, $data);
 
@@ -103,15 +113,16 @@ class HelloWorldControllerHelloWorld extends JControllerForm {
         $fileinfo = $this->input->files->get('jform', array(), 'array');
         $file = $fileinfo['imageinfo']['image'];
         /* The $file variable above should contain an array of 5 elements as follows:
-         *   name: the name of the file (on the system from which it was uploaded), without directory info
-         *   type: should be something like image/jpeg
-         *   tmp_name: pathname of the file where PHP has stored the uploaded data 
-         *   error: 0 if no error
-         *   size: size of the file in bytes
-         */
+        *   name: the name of the file (on the system from which it was uploaded), without directory info
+        *   type: should be something like image/jpeg
+        *   tmp_name: pathname of the file where PHP has stored the uploaded data
+        *   error: 0 if no error
+        *   size: size of the file in bytes
+        */
 
         // Check if any files have been uploaded
-        if ($file['error'] == 4) {   // no file uploaded (see PHP file upload error conditions)
+        if ($file['error'] == 4)   // no file uploaded (see PHP file upload error conditions)
+        {
             $validData['imageinfo'] = null;
         } else {
             if ($file['error'] > 0) {
@@ -165,20 +176,21 @@ class HelloWorldControllerHelloWorld extends JControllerForm {
 
         // Attempt to save the data.
         if (!$model->save($validData)) {
-            // Handle the case where the save failed
+            // Handle the case where the save failed - redirect back to the edit form
             $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_SAVE_FAILED', $model->getError()));
             $this->setMessage($this->getError(), 'error');
 
             return false;
         }
 
-        // clear the data in the form
+        // data has been saved ok, so clear the data in the form
         $app->setUserState($context . '.data', null);
 
         // notify the administrator that a new helloworld message has been added on the front end
+
         // get the id of the person to notify from global config
         $params = $app->getParams();
-        $userid_to_email = (int) $params->get('user_to_email');
+        $userid_to_email = (int)$params->get('user_to_email');
         $user_to_email = JUser::getInstance($userid_to_email);
         $to_address = $user_to_email->get("email");
 
@@ -202,10 +214,22 @@ class HelloWorldControllerHelloWorld extends JControllerForm {
         }
 
         $this->setRedirect(
-                $currentUri, JText::_('COM_HELLOWORLD_ADD_SUCCESSFUL')
+            $currentUri,
+            JText::_('COM_HELLOWORLD_ADD_SUCCESSFUL')
         );
 
         return true;
+
     }
 
+    public function getModel($name = '', $prefix = '', $config = array('ignore_request' => true))
+    {
+        if (empty($name)) {
+            $input = JFactory::getApplication()->input;
+            $modelname = $input->get("modelname", "helloworld", "string");
+            return parent::getModel($modelname, $prefix, $config);
+        }
+
+        return parent::getModel($name, $prefix, $config);
+    }
 }
