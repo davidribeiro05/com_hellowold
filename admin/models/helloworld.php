@@ -6,7 +6,6 @@
  * @copyright   Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
@@ -19,8 +18,11 @@ use Joomla\Registry\Registry;
  */
 class HelloWorldModelHelloWorld extends JModelAdmin
 {
-    // JModelAdmin needs to know this for storing the associations
+
+    // JModelAdmin needs to know this for storing the associations 
     protected $associationsContext = 'com_helloworld.item';
+    // Contenthistory needs to know this for restoring previous versions
+    public $typeAlias = 'com_helloworld.helloworld';
 
     /**
      * Method to override getItem to allow us to convert the JSON-encoded image information
@@ -30,7 +32,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
     public function getItem($pk = null)
     {
         $item = parent::getItem($pk);
-        if ($item and property_exists($item, 'image')) {
+        if ($item AND property_exists($item, 'image')) {
             $registry = new Registry($item->image);
             $item->imageinfo = $registry->toArray();
         }
@@ -40,7 +42,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
             $item->associations = array();
 
             if ($item->id != null) {
-                $associations = JLanguageAssociations::getAssociations('com_helloworld', '#__helloworld', 'com_helloworld.item', (int)$item->id);
+                $associations = JLanguageAssociations::getAssociations('com_helloworld', '#__helloworld', 'com_helloworld.item', (int) $item->id);
 
                 foreach ($associations as $tag => $association) {
                     $item->associations[$tag] = $association->id;
@@ -53,9 +55,9 @@ class HelloWorldModelHelloWorld extends JModelAdmin
     /**
      * Method to get a table object, load it if necessary.
      *
-     * @param string $type The table name. Optional.
-     * @param string $prefix The class prefix. Optional.
-     * @param array $config Configuration array for model. Optional.
+     * @param   string  $type    The table name. Optional.
+     * @param   string  $prefix  The class prefix. Optional.
+     * @param   array   $config  Configuration array for model. Optional.
      *
      * @return  JTable  A JTable object
      *
@@ -69,8 +71,8 @@ class HelloWorldModelHelloWorld extends JModelAdmin
     /**
      * Method to get the record form.
      *
-     * @param array $data Data for the form.
-     * @param boolean $loadData True if the form is to load its own data (default case), false if not.
+     * @param   array    $data      Data for the form.
+     * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
      *
      * @return  mixed    A JForm object on success, false on failure
      *
@@ -131,7 +133,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
     /**
      * Method to get the script to be included on the form
      *
-     * @return string    Script files
+     * @return string	Script files
      */
     public function getScript()
     {
@@ -163,7 +165,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
     /**
      * Method to override the JModelAdmin save() function to handle Save as Copy correctly
      *
-     * @param The helloworld record data submitted from the form.
+     * @param   The helloworld record data submitted from the form.
      *
      * @return  parent::save() return value
      */
@@ -175,7 +177,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 
         // Validate the category id
         // validateCategoryId() returns 0 if the catid can't be found
-        if ((int)$data['catid'] > 0) {
+        if ((int) $data['catid'] > 0) {
             $data['catid'] = CategoriesHelper::validateCategoryId($data['catid'], 'com_helloworld');
         }
 
@@ -219,6 +221,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
      */
     protected function prepareTable($table)
     {
+        
     }
 
     /**

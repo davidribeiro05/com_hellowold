@@ -1,104 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form
-        addrulepath="/administrator/components/com_helloworld/models/rules"
+    addrulepath="/administrator/components/com_helloworld/models/rules"
 >
     <fieldset
-            name="details"
-            label="COM_HELLOWORLD_HELLOWORLD_DETAILS"
+        name="details"
+        label="COM_HELLOWORLD_HELLOWORLD_DETAILS"
     >
         <field
-                name="id"
-                type="hidden"
+            name="id"
+            type="hidden"
         />
         <field
-                name="greeting"
-                type="text"
-                label="COM_HELLOWORLD_HELLOWORLD_GREETING_LABEL"
-                description="COM_HELLOWORLD_HELLOWORLD_GREETING_DESC"
-                size="40"
-                class="inputbox validate-greeting"
-                validate="greeting"
-                required="true"
-                default=""
+            name="greeting"
+            type="text"
+            label="COM_HELLOWORLD_HELLOWORLD_GREETING_LABEL"
+            description="COM_HELLOWORLD_HELLOWORLD_GREETING_DESC"
+            size="40"
+            class="inputbox validate-greeting"
+            validate="greeting"
+            required="true"
+            default=""
+        />
+        <field 
+            name="alias" 
+            type="text" 
+            label="JFIELD_ALIAS_LABEL"
+            description="JFIELD_ALIAS_DESC"
+            hint="JFIELD_ALIAS_PLACEHOLDER"
+            size="40" 
         />
         <field
-                name="alias"
-                type="text"
-                label="JFIELD_ALIAS_LABEL"
-                description="JFIELD_ALIAS_DESC"
-                hint="JFIELD_ALIAS_PLACEHOLDER"
-                size="40"
-        />
-        <field
-                name="catid"
-                type="category"
-                extension="com_helloworld"
-                class="inputbox"
-                default=""
-                label="COM_HELLOWORLD_HELLOWORLD_FIELD_CATID_LABEL"
-                description="COM_HELLOWORLD_HELLOWORLD_FIELD_CATID_DESC"
-                required="true"
+            name="catid"
+            type="category"
+            extension="com_helloworld"
+            class="inputbox"
+            default=""
+            label="COM_HELLOWORLD_HELLOWORLD_FIELD_CATID_LABEL"
+            description="COM_HELLOWORLD_HELLOWORLD_FIELD_CATID_DESC"
+            required="true"
         >
             <option value="0">JOPTION_SELECT_CATEGORY</option>
         </field>
         <field
-                name="latitude"
-                type="number"
-                label="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_LABEL"
-                description="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_DESC"
-                min="-90.0"
-                max="90.0"
-                class="inputbox"
-                required="true"
-                default="0.0"
+            name="latitude"
+            type="number"
+            label="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_LABEL"
+            description="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_DESC"
+            min="-90.0"
+            max="90.0"
+            class="inputbox"
+            required="true"
+            default="0.0"
         />
         <field
-                name="longitude"
-                type="number"
-                label="COM_HELLOWORLD_HELLOWORLD_FIELD_LONGITUDE_LABEL"
-                description="COM_HELLOWORLD_HELLOWORLD_FIELD_LONGITUDE_DESC"
-                min="-180.0"
-                max="180.0"
-                class="inputbox"
-                required="true"
-                default="0.0"
+            name="longitude"
+            type="number"
+            label="COM_HELLOWORLD_HELLOWORLD_FIELD_LONGITUDE_LABEL"
+            description="COM_HELLOWORLD_HELLOWORLD_FIELD_LONGITUDE_DESC"
+            min="-180.0"
+            max="180.0"
+            class="inputbox"
+            required="true"
+            default="0.0"
         />
-        <field
-                name="language"
-                type="contentlanguage"
-                label="JFIELD_LANGUAGE_LABEL"
-                description="COM_HELLOWORLD_HELLOWORLD_FIELD_LANGUAGE_DESC"
+        <field  
+            name="language" 
+            type="contentlanguage" 
+            label="JFIELD_LANGUAGE_LABEL"
+            description="COM_HELLOWORLD_HELLOWORLD_FIELD_LANGUAGE_DESC"
         >
             <option value="*">JALL</option>
         </field>
         <field
-                name="parent_id"
-                type="helloworldparent"
-                label="COM_HELLOWORLD_HELLOWORLD_FIELD_PARENT_LABEL"
-                description="COM_HELLOWORLD_HELLOWORLD_FIELD_PARENT_DESC"
-                default="1"
-                filter="int">
+            name="parent_id"
+            type="helloworldparent"
+            label="COM_HELLOWORLD_HELLOWORLD_FIELD_PARENT_LABEL"
+            description="COM_HELLOWORLD_HELLOWORLD_FIELD_PARENT_DESC"
+            default="1"
+            filter="int">
         </field>
         <field
-                name="helloworldordering"
-                type="helloworldordering"
-                label="JFIELD_ORDERING_LABEL"
-                description="JFIELD_ORDERING_DESC"
-                filter="int"
-                size="1">
+            name="helloworldordering"
+            type="helloworldordering"
+            label="JFIELD_ORDERING_LABEL"
+            description="JFIELD_ORDERING_DESC"
+            filter="int"
+            size="1">
+        </field>
+        <field 	name="version_note"
+                type="text"
+                label="JGLOBAL_FIELD_VERSION_NOTE_LABEL"
+                description="JGLOBAL_FIELD_VERSION_NOTE_DESC"
+                class="inputbox" 
+                size="45"
+                labelclass="control-label">
         </field>
     </fieldset>
+    <field 	name="description" 
+                type="editor"
+                label="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_LABEL" 
+                description="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_DESC"
+                filter="JComponentHelper::filterText" 
+                buttons="true" 
+    />
     <fields name="imageinfo">
         <fieldset
-                name="image-info"
-                label="COM_HELLOWORLD_IMAGE_FIELDS"
+            name="image-info"
+            label="COM_HELLOWORLD_IMAGE_FIELDS"
         >
             <field
-                    name="image"
-                    type="media"
-                    preview="tooltip"
-                    label="COM_HELLOWORLD_HELLOWORLD_FIELD_IMAGE_LABEL"
-                    description="COM_HELLOWORLD_HELLOWORLD_FIELD_IMAGE_DESC"/>
+                name="image"
+                type="media"
+                preview="tooltip"
+                label="COM_HELLOWORLD_HELLOWORLD_FIELD_IMAGE_LABEL"
+                description="COM_HELLOWORLD_HELLOWORLD_FIELD_IMAGE_DESC" />
             <field name="alt"
                    type="text"
                    label="COM_HELLOWORLD_HELLOWORLD_FIELD_ALT_LABEL"
@@ -113,15 +128,15 @@
     </fields>
     <fields name="params">
         <fieldset
-                name="params"
-                label="JGLOBAL_FIELDSET_DISPLAY_OPTIONS"
+            name="params"
+            label="JGLOBAL_FIELDSET_DISPLAY_OPTIONS"
         >
             <field
-                    name="show_category"
-                    type="list"
-                    label="COM_HELLOWORLD_HELLOWORLD_FIELD_SHOW_CATEGORY_LABEL"
-                    description="COM_HELLOWORLD_HELLOWORLD_FIELD_SHOW_CATEGORY_DESC"
-                    default=""
+                name="show_category"
+                type="list"
+                label="COM_HELLOWORLD_HELLOWORLD_FIELD_SHOW_CATEGORY_LABEL"
+                description="COM_HELLOWORLD_HELLOWORLD_FIELD_SHOW_CATEGORY_DESC"
+                default=""
             >
                 <option value="">JGLOBAL_USE_GLOBAL</option>
                 <option value="0">JHIDE</option>
@@ -130,23 +145,23 @@
         </fieldset>
     </fields>
     <fieldset
-            name="accesscontrol"
-            label="COM_HELLOWORLD_FIELDSET_RULES"
+        name="accesscontrol"
+        label="COM_HELLOWORLD_FIELDSET_RULES"
     >
         <field
-                name="asset_id"
-                type="hidden"
-                filter="unset"
+            name="asset_id"
+            type="hidden"
+            filter="unset"
         />
         <field
-                name="rules"
-                type="rules"
-                label="COM_HELLOWORLD_FIELD_RULES_LABEL"
-                filter="rules"
-                validate="rules"
-                class="inputbox"
-                component="com_helloworld"
-                section="message"
+            name="rules"
+            type="rules"
+            label="COM_HELLOWORLD_FIELD_RULES_LABEL"
+            filter="rules"
+            validate="rules"
+            class="inputbox"
+            component="com_helloworld"
+            section="message"
         />
     </fieldset>
 </form>
