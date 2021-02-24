@@ -27,7 +27,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
     /**
      * Method to override getItem to allow us to convert the JSON-encoded image information
      * in the database record into an array for subsequent prefilling of the edit form
-     * We also use this method to prefill the associations
+     * We also use this method to prefill the tags and associations
      */
     public function getItem($pk = null)
     {
@@ -35,6 +35,11 @@ class HelloWorldModelHelloWorld extends JModelAdmin
         if ($item AND property_exists($item, 'image')) {
             $registry = new Registry($item->image);
             $item->imageinfo = $registry->toArray();
+        }
+
+        if (!empty($item->id)) {
+            $tagsHelper = new JHelperTags;
+            $item->tags = $tagsHelper->getTagIds($item->id, 'com_helloworld.helloworld');
         }
 
         // Load associated items

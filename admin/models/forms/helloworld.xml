@@ -71,6 +71,28 @@
         >
             <option value="*">JALL</option>
         </field>
+        <field 	name="published" 
+                        type="list" 
+                        label="JSTATUS"
+                        description="JFIELD_PUBLISHED_DESC" 
+                        class="chzn-color-state"
+                        filter="intval" 	
+                        size="1" 
+                        default="1"
+        >
+            <option value="1">
+                JPUBLISHED</option>
+            <option value="0">
+                JUNPUBLISHED</option>
+        </field>
+        <field 
+            name="tags" 
+            type="tag"
+            label="JTAG" 
+            description="JTAG_DESC"
+            multiple="true"
+        >
+        </field>
         <field
             name="parent_id"
             type="helloworldparent"
@@ -88,20 +110,20 @@
             size="1">
         </field>
         <field 	name="version_note"
-                type="text"
-                label="JGLOBAL_FIELD_VERSION_NOTE_LABEL"
-                description="JGLOBAL_FIELD_VERSION_NOTE_DESC"
-                class="inputbox" 
-                size="45"
-                labelclass="control-label">
+                        type="text"
+                        label="JGLOBAL_FIELD_VERSION_NOTE_LABEL"
+                        description="JGLOBAL_FIELD_VERSION_NOTE_DESC"
+                        class="inputbox" 
+                        size="45"
+                        labelclass="control-label">
         </field>
     </fieldset>
     <field 	name="description" 
-                type="editor"
-                label="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_LABEL" 
-                description="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_DESC"
-                filter="JComponentHelper::filterText" 
-                buttons="true" 
+                        type="editor"
+                        label="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_LABEL" 
+                        description="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_DESC"
+                        filter="JComponentHelper::filterText" 
+                        buttons="true" 
     />
     <fields name="imageinfo">
         <fieldset

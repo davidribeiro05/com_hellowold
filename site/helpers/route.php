@@ -40,4 +40,49 @@ class HelloworldHelperRoute
             return null;
         }
     }
+
+    /**
+     * Helper function for generating the URL to a Helloworld page
+     * This is needed for the Tags functionality
+     */
+    public static function getHelloworldRoute($id, $catid = 0, $language = 0)
+    {
+        // Create the link
+        $link = 'index.php?option=com_helloworld&view=helloworld&id=' . $id;
+
+        if ((int) $catid > 1) {
+            $link .= '&catid=' . $catid;
+        }
+
+        if ($language && $language !== '*' && JLanguageMultilang::isEnabled()) {
+            $link .= '&lang=' . $language;
+        }
+
+        return $link;
+    }
+
+    /**
+     * Helper function for generating the URL to a Helloworld Category page
+     * This is needed for the Tags functionality
+     */
+    public static function getCategoryRoute($catid, $language = 0)
+    {
+        if ($catid instanceof JCategoryNode) {
+            $id = $catid->id;
+        } else {
+            $id = (int) $catid;
+        }
+
+        if ($id < 1) {
+            $link = '';
+        } else {
+            $link = 'index.php?option=com_helloworld&view=category&id=' . $id;
+
+            if ($language && $language !== '*' && JLanguageMultilang::isEnabled()) {
+                $link .= '&lang=' . $language;
+            }
+        }
+
+        return $link;
+    }
 }

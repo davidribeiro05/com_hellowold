@@ -22,6 +22,8 @@ if (JLanguageMultilang::isEnabled() && $lang) {
 </h1>
     <?php
     echo $this->item->description;
+    $tagLayout = new JLayoutFile('joomla.content.tags');
+    echo $tagLayout->render($this->item->tags);
     $src = $this->item->imageDetails['image'];
     if ($src) {
         $html = '<figure>
